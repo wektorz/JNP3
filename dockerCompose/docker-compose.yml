@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  favourites_service:
+    build: favouritesDocker/
+    ports:
+      - '10000:8080'
+  shoppingcart_service:
+    build: shoppingCartDocker/
+    ports:
+      - '10001:8080'
+#  login_service:
+#    build: loginDocker/
+#    ports:
+#      - '10002:8080'
+#  products_service:
+#    build: productsDocker/
+#    ports:
+#      - '10003:8080'
