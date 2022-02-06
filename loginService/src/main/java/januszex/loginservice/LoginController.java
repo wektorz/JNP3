@@ -1,27 +1,39 @@
 package januszex.loginservice;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
-    @GetMapping("/auth")
-    public ResponseEntity<String> authenticate()
+    @PostMapping(
+            value = "/auth",
+            consumes = {MediaType.APPLICATION_JSON_VALUE}
+            )
+    public ResponseEntity<String> authenticate(@RequestBody LoginAndPassword json)
     {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    @GetMapping("/register")
-    public ResponseEntity<String> register()
+    @PostMapping(
+            value = "/register",
+            consumes = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity<String> register(@RequestBody LoginAndPassword json)
     {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login()
+    @PostMapping(
+            value = "/login",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity<String> login(@RequestBody LoginAndPassword json)
     {
         return new ResponseEntity<>(HttpStatus.OK);
     }
