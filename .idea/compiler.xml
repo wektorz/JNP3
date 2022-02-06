@@ -9,16 +9,19 @@
         <outputRelativeToContentRoot value="true" />
         <module name="favouritesService" />
         <module name="shoppingCartService" />
+        <module name="loginService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="favouritesService" target="11" />
+      <module name="loginService" target="11" />
       <module name="shoppingCartService" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="favouritesService" options="-parameters" />
+      <module name="loginService" options="-parameters" />
       <module name="shoppingCartService" options="-parameters" />
     </option>
   </component>
