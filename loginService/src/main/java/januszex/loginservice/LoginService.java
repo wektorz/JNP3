@@ -12,7 +12,7 @@ public class LoginService {
     public ResponseEntity<String> login(LoginAndPassword login)
     {
 
-        System.out.println(login);
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println(login.toString());
+        return new ResponseEntity<>(login.toString(), HttpStatus.OK);
     }
 }
