@@ -1,4 +1,6 @@
 FROM openjdk:17
-ARG FILENAME=loginService-0.0.1-SNAPSHOT.jar
-COPY ${FILENAME} /
-ENTRYPOINT ["java", "-jar", "${FILENAME}"]
+ARG SERVICE=loginService
+ARG FILENAME=${SERVICE}-0.0.1-SNAPSHOT.jar
+ENV FILENAME_ENV=${FILENAME}
+ADD target/${FILENAME} /
+ENTRYPOINT java -jar $(echo ${FILENAME_ENV})
