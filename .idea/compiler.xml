@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="favouritesService" />
-        <module name="shoppingCartService" />
         <module name="loginService" />
+        <module name="shoppingCartService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

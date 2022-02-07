@@ -2,11 +2,15 @@ version: '3.8'
 
 services:
   favourites_service:
-    build: favouritesDocker/
+    build:
+      context: ../favouritesService/
+      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
     ports:
       - '10000:8080'
   shoppingcart_service:
-    build: shoppingCartDocker/
+    build:
+      context: ../shoppingCartService/
+      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
     ports:
       - '10001:8080'
 #  login_service:
