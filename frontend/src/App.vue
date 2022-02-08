@@ -1,9 +1,17 @@
 <template>
 <nav>
   <div class="flexbox">
+  <div>
+  <button @click="showForm=true;loginForm=true;">
+    Login
+  </button>
+   <button @click="showForm=true;loginForm=false;">
+    Register
+    </button>
     <router-link to="/favourites">
       <button class="favbutton">Favourites *</button>
     </router-link>
+  </div>
     <router-link to="/">
       <img src="../src/assets/logo.png" style="height:100%;">
     </router-link>
@@ -16,8 +24,26 @@
     </router-link>
   </div>
 </nav>
+  <Form :text="loginForm ? 'Login' : 'Register'"
+        :isLogin="loginForm" 
+        v-model="showForm" 
+        v-show="showForm"></Form>
   <router-view/>
 </template>
+
+<script>
+import Form from '@/components/Form.vue'
+export default {
+  components: { Form },
+  name: 'App',
+  data () {
+    return {
+      showForm: false,
+      loginForm: true 
+    }
+  }
+}
+</script>
 
 <style>
 .body{
