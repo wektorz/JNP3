@@ -2,11 +2,14 @@
 <nav>
   <div class="flexbox">
   <div>
-  <button @click="showForm=true;loginForm=true;">
+  <button v-if="!authed" @click="showForm=true;loginForm=true;">
     Login
   </button>
-   <button @click="showForm=true;loginForm=false;">
+   <button v-if="!authed" @click="showForm=true;loginForm=false;">
     Register
+    </button>
+    <button v-if="authed" @click="authed=false">
+    Logout
     </button>
     <router-link to="/favourites">
       <button class="favbutton">Favourites *</button>
@@ -26,7 +29,8 @@
 </nav>
   <Form :text="loginForm ? 'Login' : 'Register'"
         :isLogin="loginForm" 
-        v-model="showForm" 
+        v-model:showForm="showForm"
+        v-model:authed="authed" 
         v-show="showForm"></Form>
   <router-view/>
 </template>
@@ -39,7 +43,8 @@ export default {
   data () {
     return {
       showForm: false,
-      loginForm: true 
+      loginForm: true,
+      authed: false 
     }
   }
 }

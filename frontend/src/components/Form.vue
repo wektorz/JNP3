@@ -11,7 +11,8 @@
 
         <div class="container">
           <label for="uname"><b>Username</b></label>
-          <input v-model="login"
+          <input
+            v-model="login"
             type="text"
             placeholder="Enter Username"
             name="uname"
@@ -19,14 +20,15 @@
           />
 
           <label for="psw"><b>Password</b></label>
-          <input v-model="password"
+          <input
+            v-model="password"
             type="password"
             placeholder="Enter Password"
             name="psw"
             required
           />
 
-          <button type="submit">{{text}}</button>
+          <button type="submit">{{ text }}</button>
         </div>
       </form>
     </div>
@@ -36,12 +38,12 @@
 <script>
 export default {
   name: "Form",
-  props: ["modelValue", "text", "isLogin"],
-  data () {
+  props: ["authed", "showForm", "text", "isLogin"],
+  data() {
     return {
       login: "",
-      password: ""
-    }
+      password: "",
+    };
   },
   computed: {
     visibility: {
@@ -49,36 +51,56 @@ export default {
         return this.modelValue;
       },
       set(value) {
-        this.$emit("update:modelValue", value);
+        this.$emit("update:showForm", value);
         return 0;
       },
-    }
+    },
   },
   methods: {
     postToLoginService() {
-      if (this.isLogin){
+      if (this.isLogin) {
         // post to /api/login
-        this.axios.post("http://login_service:8080/api/login", {login: this.login, password: this.password}, (req, res) => {
-          res.header("Access-Control-Allow-Origin", "*");
-        }).then(response => console.log(response));
-        visibility = false;
-      }
-      else{
+        this.axios
+          .post(
+            "http://login_service:8080/api/login",
+            { login: this.login, password: this.password },
+            {
+              headers: {
+                "Content-Type":
+                  "application/x-www-form-urlencoded; charset=UTF-8",
+              },
+            }
+          )
+          .then((response) => console.log(response));
+        this.$emit('update:authed', true);  
+        this.visibility = false;
+      } else {
         //post to /api/register
         console.log("register");
-        this.axios.post("http://login_service:8080/api/register", {login: this.login, password: this.password}, (req, res) => {
-          res.header("Access-Control-Allow-Origin", "*");
-        }).then(response => console.log(response));
-        visibility = false;
+        this.axios
+          .post(
+            "http://login_service:8080/api/register",
+            { login: this.login, password: this.password },
+            {
+              headers: {
+                "Content-Type":
+                  "application/x-www-form-urlencoded; charset=UTF-8",
+              },
+            }
+          )
+          .then((response) => console.log(response));
+        this.$emit('update:authed', true);
+        this.visibility = false;
       }
-    }
-    }
+    },
+  },
 };
 </script>
 
 <style scoped>
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -89,7 +111,7 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button {
-  background-color: #04AA6D;
+  background-color: #04aa6d;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -139,8 +161,8 @@ span.psw {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   padding-top: 60px;
 }
 
@@ -171,27 +193,35 @@ span.psw {
 /* Add Zoom Animation */
 .animate {
   -webkit-animation: animatezoom 0.6s;
-  animation: animatezoom 0.6s
+  animation: animatezoom 0.6s;
 }
 
 @-webkit-keyframes animatezoom {
-  from {-webkit-transform: scale(0)} 
-  to {-webkit-transform: scale(1)}
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
 }
-  
+
 @keyframes animatezoom {
-  from {transform: scale(0)} 
-  to {transform: scale(1)}
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
   span.psw {
-     display: block;
-     float: none;
+    display: block;
+    float: none;
   }
   .cancelbtn {
-     width: 100%;
+    width: 100%;
   }
 }
 </style>
