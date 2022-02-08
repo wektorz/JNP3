@@ -60,6 +60,7 @@ export default {
     postToLoginService() {
       if (this.isLogin) {
         // post to /api/login
+        // jeśli nie działa to localhost:port_z_compose
         this.axios
           .post(
             "http://login_service:8080/api/login",
@@ -71,8 +72,7 @@ export default {
               },
             }
           )
-          .then((response) => console.log(response));
-        this.$emit('update:authed', true);  
+          .then((response) => {console.log(response); if (response.status == 200) this.$emit('update:authed', true);});   
         this.visibility = false;
       } else {
         //post to /api/register
@@ -88,8 +88,7 @@ export default {
               },
             }
           )
-          .then((response) => console.log(response));
-        this.$emit('update:authed', true);
+          .then((response) => {console.log(response); if (response.status == 200) this.$emit('update:authed', true);});
         this.visibility = false;
       }
     },
