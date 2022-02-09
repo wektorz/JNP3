@@ -60,3 +60,9 @@ volumes:
 #    build: productsDocker/
 #    ports:
 #      - '10003:8080'
+  front:
+    build:
+      context: ../frontend
+      dockerfile: ../dockerCompose/frontDocker/Dockerfile
+    ports:
+      - '44444:8080'
