@@ -1,6 +1,11 @@
 package januszex.loginservice;
 
+import org.springframework.data.annotation.Id;
+
 public class LoginAndPassword {
+    @Id
+    private int id;
+
     private String login;
     private String haslo;
 
@@ -16,18 +21,18 @@ public class LoginAndPassword {
 
     @Override
     public String toString() {
-        return "LoginAndPassword{" +
+        return "{" +
                 "login='" + login + '\'' +
                 ", haslo='" + haslo + '\'' +
                 '}';
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getHaslo() {
