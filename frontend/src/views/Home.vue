@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>HOME</h1>
+    <button @click="testshop()">test</button>
+    <p>{{test}}</p>
     <div class="products">
       <div v-for="i in 20" :key="i" class="product">
         <ProductCard :img="img"></ProductCard>
@@ -18,8 +20,14 @@ export default {
   data() {
     return {
       img: "fork.jpg",
+      test: ""
     };
   },
+  methods:{
+    async testshop(){
+      this.test = await this.axios.get('http://localhost:10001/api/shop').then(response => response.data)
+    }
+  }
 };
 </script>
 
