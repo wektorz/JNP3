@@ -91,4 +91,29 @@ public class LoginService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
+
+    public ResponseEntity<String> logout(LoginAndCookie login)
+    {
+        BooleanWrapper ok = new BooleanWrapper();
+
+        loginAndCookieRepository.findLoginAndCookieByLoginAndCookie(login.getLogin(), login.getCookie())
+                .ifPresentOrElse(
+                        l -> { ok.set(true); },
+                        ()->{ ok.set(false); }
+                );
+
+        if(ok.get())
+        {
+            System.out.println("OK logout");
+            loginAndCookieRepository.deleteLoginAndCookieByLogin(login.getLogin());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else
+        {
+            System.out.println("BAD logout");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

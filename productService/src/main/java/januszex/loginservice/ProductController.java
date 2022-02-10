@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
-public class LoginController {
+public class ProductController {
     @Autowired
-    private LoginService service;
+    private ProductsService service;
 
+    /*
     @PostMapping(
             value = "/auth",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -25,29 +26,8 @@ public class LoginController {
     public ResponseEntity<String> authenticate(@RequestBody LoginAndCookie json)
     {
         return service.auth(json);
-    }
+    }*/
 
 
-    @PostMapping(value = "/register", produces = "application/json")
-    public ResponseEntity<String> register(@RequestBody LoginAndPassword json)
-    {
-        return service.register(json);
-    }
 
-    @PostMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<String> login(@RequestBody LoginAndPassword json)
-    {
-        return service.login(json);
-    }
-
-
-    @PostMapping(
-            value = "/logout",
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = "application/json"
-    )
-    public ResponseEntity<String> logout(@RequestBody LoginAndCookie json)
-    {
-        return service.logout(json);
-    }
 }
