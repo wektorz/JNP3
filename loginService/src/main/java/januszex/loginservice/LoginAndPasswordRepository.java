@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface LoginAndPasswordRepository extends MongoRepository<LoginAndPassword, String> {
 
     Optional<LoginAndPassword> findLoginAndPasswordByLogin(String login);
+    Optional<LoginAndPassword> findLoginAndPasswordByLoginAndHaslo(String login, String haslo);
 }

@@ -37,8 +37,16 @@ public class LoginAndCookie {
     @Override
     public String toString() {
         return "{" +
-                "login='" + login + '\'' +
-                ", cookie='" + cookie + '\'' +
+                "\"login\": \"" + login + "\"," +
+                "\"cookie\": \"" + cookie + "\"" +
                 '}';
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getCookie() {
+        return cookie;
     }
 }
