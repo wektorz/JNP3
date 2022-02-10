@@ -10,6 +10,6 @@ import java.io.Serializable;
 public class CartDTO implements Serializable {
     private String cookie;
     private String login;
-    private int itemId;
+    private String itemId;
     private int quantity;
 }

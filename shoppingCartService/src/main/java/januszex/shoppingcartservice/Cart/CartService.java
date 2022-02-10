@@ -50,8 +50,9 @@ public class CartService {
         Cart cartToUpdate = cartRepository.findById(request.getLogin()).orElse(new Cart(request.getLogin(), new TreeMap<>()));
         //get product json
 //        HttpEntity<String> response = restTemplate.getForEntity(productUrl + String.format("?itemId=%d&noImg=true", request.getItemId()), String.class);
-//        cartToUpdate.getCartProducts().add(response.getBody());
-        String product = String.format("{id: %d, desc: siusiu, price: 33, img: fork.png, quantity: %d}", request.getItemId(), request.getQuantity());
+//        cartToUpdate.getCartProducts().add(makeCartJson(response));
+        String product = String.format("{id: %s, desc: AMOGUS, price: 33, img:" +
+                "iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgBAMAAACP+qOmAAAAAXNSR0IArs4c6QAAABVQTFRF////AAAA/wAAOs7/AFX/zwEBpgEBlCh+3wAAAiZJREFUeJztz0ENwzAQRcFSCIVSKIVQKIXyh9BzfFjFsle7keZdE397Xi9JkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ2tqxr2rKvYCBgYGBOwcMDAwM3DlgYGBg4M4BAwMDA3cOGBgYuDd4eOV7X039wMDAwMDAwHUBAwMDAwMD1wUMDAwMDAxcFzAwMHBvcJ6wqR8YGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGPgeeKqN4DhgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYOAM8LD1uTb8PHw9r634p84u+YGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBge+Bz4U2gr9hwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAGeDYP9WUEBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgY+Fng+OIp0pQBGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj4WeCNDff+woCBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgZuDN56NWxICAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMngON3bJxKDBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGHimI6xqKjFg4IqpxICBK6YSAwaumEoMGLhiKjFg4IqpxICBK6YSAwaumEoMGLhiKjFg4IqpxICfB/4DuW/19h/Z4dgAAAAASUVORK5CYII=, quantity: %d}", request.getItemId(), request.getQuantity());
         cartToUpdate.getCartProducts().put(request.getItemId(), product);
 
         cartRepository.save(cartToUpdate);
@@ -71,11 +72,15 @@ public class CartService {
 
     public void buy(BuyDTO comparisonCart) throws Exception {
         //isAuthed
-        if (restTemplate.postForEntity(authUrl,
-                makeAuthPostBody(new UserPair(comparisonCart.getCookie(), comparisonCart.getCart().getOwnerLogin())),
+        if (restTemplate.postForEntity(authUrl, makeAuthPostBody(new UserPair(comparisonCart.getCookie(), comparisonCart.getLogin())),
                 Object.class).getStatusCode() != HttpStatus.OK)
             throw new Exception("400");
+
+        if (!compareCarts(comparisonCart.getCart()))
+            throw new Exception("400");
+        cartRepository.deleteById(comparisonCart.getLogin());
     }
+
 
     private HttpEntity<Map<String, Object>> makeAuthPostBody(UserPair user){
         // create headers
@@ -86,6 +91,14 @@ public class CartService {
         entries.put("login", user.getLogin());
         entries.put("cookie", user.getCookie());
         return new HttpEntity<>(entries);
+    }
+
+    private String makeCartJson(HttpEntity<String> response){
+        return "";
+    }
+
+    private boolean compareCarts(ArrayList<ProductDTO> cart) {
+        return true;
     }
 
 }
