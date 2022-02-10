@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "api/cart")
 public class CartController {
@@ -25,51 +26,42 @@ public class CartController {
 
     @GetMapping
     public ResponseEntity<List<String>> getCart(@RequestParam int id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try {
-            return new ResponseEntity<>(cartService.getCart(id), headers, HttpStatus.OK);
+            return new ResponseEntity<>(cartService.getCart(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
     public ResponseEntity<String> addToCart(@RequestBody CartDTO request){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         logger.error(request.toString());
         try {
             cartService.addToCart(request);
-            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed", headers, 404);
+            return new ResponseEntity<>("Failed", HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteFromCart(@RequestBody CartDTO request){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try {
-
             cartService.deleteFromCart(request);
-            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed", headers, 400);
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/buy")
     public ResponseEntity<String> buyCart(@RequestBody Cart cart){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try {
             cartService.buy(cart);
-            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed", headers, 400);
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }
     }
 

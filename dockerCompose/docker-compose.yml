@@ -1,81 +1,89 @@
 version: '3.8'
 
 services:
-  front:
-    build:
-      context: ../frontend
-      dockerfile: ../dockerCompose/frontDocker/Dockerfile
+  redis:
+    container_name: redis
+    image: redis:v1
+    build: redisDocker/
+    hostname: redis
     ports:
-      - '44444:8080'
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+#  front:
+#    build:
+#      context: ../frontend
+#      dockerfile: ../dockerCompose/frontDocker/Dockerfile
+#    ports:
+#      - '44444:8080'
 
-  favourites_service:
-    build:
-      context: ../favouritesService/
-      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
+#  favourites_service:
+#    build:
+#      context: ../favouritesService/
+#      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
+#    hostname: 'favourites_service'
 #    depends_on:
 #      - redis
-    ports:
-      - '10000:8080'
-    volumes:
-      - '~/'
-
+#    ports:
+#      - '10000:8080'
+#    volumes:
+#      - '~/'
+#
   shoppingcart_service:
     build:
       context: ../shoppingCartService/
       dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
-#    depends_on:
-#      - redis
+    links:
+      - redis
     ports:
       - '10001:8080'
-
-  login_service:
-    build:
-      context: ../loginService/
-      dockerfile: ../dockerCompose/loginDocker/Dockerfile
-    ports:
-      - '10002:8080'
-    depends_on:
-      - mongodb
     environment:
-      - spring_data_mongodb_authentication_database=admin
-      - spring_data_mongodb_database=mydatabase
-      - spring_data_mongodb_port=27017
-      - spring_data_mongodb_host=mongodb
-      #- spring_data_mongodb_username=root
-      #- spring_data_mongodb_password=root
+      logging.level.org.springframework: DEBUG
 
-
-
-  mongodb:
-    image: mongo
-    container_name: "mongodb"
-    ports:
-      - 27017:27017
-    volumes:
-      - data:/data
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-
-#  redis:
-#    image: redis
-#    container_name: "redis"
+#
+#  login_service:
+#    build:
+#      context: ../loginService/
+#      dockerfile: ../dockerCompose/loginDocker/Dockerfile
 #    ports:
-#      - '6379:6379'
-
-# panel admina idk czemu nie działa pewnie wina WSL2 :(
-#  login_db_express:
-#      image: mongo-express
-#      ports:
-#        - 8081:10005
-#      container_name: "login_db_express"
-#      environment:
-#        - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-#        - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-#        - ME_CONFIG_MONGODB_SERVER=logindb
+#      - '10002:8080'
+#    depends_on:
+#      - mongodb
+#    environment:
+#      - spring_data_mongodb_authentication_database=admin
+#      - spring_data_mongodb_database=mydatabase
+#      - spring_data_mongodb_port=27017
+#      - spring_data_mongodb_host=mongodb
+#      #- spring_data_mongodb_username=root
+#      #- spring_data_mongodb_password=root
+#
+#
+#
+#  mongodb:
+#    image: mongo
+#    container_name: "mongodb"
+#    ports:
+#      - 27017:27017
+#    volumes:
+#      - data:/data
+#    environment:
+#      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+#      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+#
+## panel admina idk czemu nie działa pewnie wina WSL2 :(
+##  login_db_express:
+##      image: mongo-express
+##      ports:
+##        - 8081:10005
+##      container_name: "login_db_express"
+##      environment:
+##        - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+##        - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+##        - ME_CONFIG_MONGODB_SERVER=logindb
 
 volumes:
   data: {}
+  redis_data:
 
 
 #  products_service:

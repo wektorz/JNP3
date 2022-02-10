@@ -1,5 +1,4 @@
 FROM openjdk:17
-VOLUME /favouritesRedis
 ARG SERVICE=favouritesService
 ARG FILENAME=${SERVICE}-0.0.1-SNAPSHOT.jar
 ENV FILENAME_ENV=${FILENAME}

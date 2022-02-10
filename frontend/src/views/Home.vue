@@ -28,10 +28,10 @@ export default {
   },
   methods:{
     async testGet(){
-      this.test = await this.axios.get(`http://localhost:8080/api/cart?id=${this.getId}`).then(response => response.data)
+      this.test = await this.axios.get(`http://localhost:10001/api/cart?id=${this.getId}`).then(response => response.data)
     },
     async testPost(){
-      this.test = await this.axios.post('http://localhost:8080/api/cart', {userId: this.getId, itemId: 10101, quantity: 3}).then(response => response.data)
+      this.test = await this.axios.post('http://localhost:10001/api/cart', {userId: this.getId, itemId: 10101, quantity: 3}).then(response => response.data)
     }
   }
 };
