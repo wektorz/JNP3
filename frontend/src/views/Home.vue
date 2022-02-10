@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>HOME</h1>
-    <button @click="testshop()">test</button>
+    <button @click="testGet()">testGet</button>
+    <button @click="testPost()">testPost</button>
+    <input v-model="getId" type="number">
     <p>{{test}}</p>
     <div class="products">
       <div v-for="i in 20" :key="i" class="product">
@@ -20,12 +22,16 @@ export default {
   data() {
     return {
       img: "fork.jpg",
-      test: ""
+      test: "",
+      getId : ""
     };
   },
   methods:{
-    async testshop(){
-      this.test = await this.axios.get('http://localhost:10001/api/shop').then(response => response.data)
+    async testGet(){
+      this.test = await this.axios.get(`http://localhost:8080/api/cart?id=${this.getId}`).then(response => response.data)
+    },
+    async testPost(){
+      this.test = await this.axios.post('http://localhost:8080/api/cart', {userId: this.getId, itemId: 10101, quantity: 3}).then(response => response.data)
     }
   }
 };
