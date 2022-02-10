@@ -33,9 +33,9 @@
       </router-link>
       <router-link v-if="authed" to="/cart">
         <div id="cartContainter">
-          <div id="cartValue">$27.01</div>
+          <div id="cartValue">${{cartSum}}</div>
           <img src="../src/assets/cart.png" style="height: inherit" />
-          <div id="cartItemNumber">2</div>
+          <div id="cartItemNumber">{{cartItemsQuantity}}</div>
         </div>
       </router-link>
     </div>
@@ -44,10 +44,10 @@
     :text="loginForm ? 'Login' : 'Register'"
     :isLogin="loginForm"
     v-model:showForm="showForm"
-    v-model:authed="authed"
     v-show="showForm"
+    @authed="auth"
   ></Form>
-  <router-view />
+  <router-view :authed="authed" :cookie="cookie" :login="login" @updatePrice="updatePrice" @updateCartQuantity="updateCartQuantity"/>
 </template>
 
 <script>
@@ -60,9 +60,40 @@ export default {
       showForm: false,
       loginForm: true,
       authed: false,
-      clientId: -1,
+      login: "jan",
+      cookie: "siur",
+      cartSum: 0,
+      cartItemsQuantity: 0
     };
   },
+  async created() {
+    //auth
+    //if authed
+    this.syncCartData();
+  },
+  methods: {
+    updatePrice(add) {
+      this.cartSum += add;
+      if(this.cartSum < 0)
+        this.cartSum = 0; 
+    },
+    updateCartQuantity(add) {
+      this.cartItemsQuantity += add;
+      if(this.cartItemsQuantity < 0)
+        this.cartItemsQuantity = 0;
+    },
+    async syncCartData() {
+      const data = await this.axios.get(`http://localhost:8080/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
+      this.cartSum = data.map(product => (product.price * product.quantity)).reduce((acc, price) => price + acc);
+      this.cartItemsQuantity = data.map(product => product.quantity).reduce((acc, quantity) => quantity + acc);
+    },
+    auth(cookie, login) {
+      this.authed = true;
+      this.cookie = cookie;
+      this.login = login;
+      this.syncCartData();
+    }
+  }
 };
 </script>
 

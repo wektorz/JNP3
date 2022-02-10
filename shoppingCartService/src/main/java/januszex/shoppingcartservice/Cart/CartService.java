@@ -32,7 +32,7 @@ public class CartService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public ArrayList<String> getCart(UserPair user) throws Exception {
+    public ArrayList<ProductDTO> getCart(UserPair user) throws Exception {
         //isAuthed
 //        if (restTemplate.postForEntity(authUrl, makeAuthPostBody(user), Object.class).getStatusCode() != HttpStatus.OK)
 //            throw new Exception("400");
@@ -48,13 +48,16 @@ public class CartService {
 
         //if no cart present build new one
         Cart cartToUpdate = cartRepository.findById(request.getLogin()).orElse(new Cart(request.getLogin(), new TreeMap<>()));
+        if(cartToUpdate.getCartProducts() == null)
+            cartToUpdate.setCartProducts(new TreeMap<>());
+        logger.error(cartToUpdate.getCartProducts().toString());
         //get product json
 //        HttpEntity<String> response = restTemplate.getForEntity(productUrl + String.format("?itemId=%d&noImg=true", request.getItemId()), String.class);
 //        cartToUpdate.getCartProducts().add(makeCartJson(response));
-        String product = String.format("{id: %s, desc: AMOGUS, price: 33, img:" +
-                "iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgBAMAAACP+qOmAAAAAXNSR0IArs4c6QAAABVQTFRF////AAAA/wAAOs7/AFX/zwEBpgEBlCh+3wAAAiZJREFUeJztz0ENwzAQRcFSCIVSKIVQKIXyh9BzfFjFsle7keZdE397Xi9JkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ2tqxr2rKvYCBgYGBOwcMDAwM3DlgYGBg4M4BAwMDA3cOGBgYuDd4eOV7X039wMDAwMDAwHUBAwMDAwMD1wUMDAwMDAxcFzAwMHBvcJ6wqR8YGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGPgeeKqN4DhgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYOAM8LD1uTb8PHw9r634p84u+YGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBge+Bz4U2gr9hwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAGeDYP9WUEBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgY+Fng+OIp0pQBGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj4WeCNDff+woCBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgZuDN56NWxICAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMngON3bJxKDBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGHimI6xqKjFg4IqpxICBK6YSAwaumEoMGLhiKjFg4IqpxICBK6YSAwaumEoMGLhiKjFg4IqpxICfB/4DuW/19h/Z4dgAAAAASUVORK5CYII=, quantity: %d}", request.getItemId(), request.getQuantity());
-        cartToUpdate.getCartProducts().put(request.getItemId(), product);
-
+        ProductDTO product = new ProductDTO(request.getItemId(), "AMOGUS", 33, "siusiak", 1);
+        cartToUpdate.getCartProducts().computeIfPresent(request.getItemId(),
+                (key, value) -> new ProductDTO(value.getId(), value.getDesc(), value.getPrice(), value.getImg(), value.getQuantity() + product.getQuantity()));
+        cartToUpdate.getCartProducts().putIfAbsent(request.getItemId(), product);
         cartRepository.save(cartToUpdate);
     }
 
@@ -64,7 +67,11 @@ public class CartService {
 //            throw new Exception("400");
 
         Cart cartToUpdate = cartRepository.findById(request.getLogin()).orElseThrow();
-        cartToUpdate.getCartProducts().remove(request.getItemId());
+        if (cartToUpdate.getCartProducts().get(request.getItemId()).getQuantity() <= request.getQuantity())
+            cartToUpdate.getCartProducts().remove(request.getItemId());
+        else
+            cartToUpdate.getCartProducts().computeIfPresent(request.getItemId(),
+                    (key, value) -> new ProductDTO(value.getId(), value.getDesc(), value.getPrice(), value.getImg(), value.getQuantity() - request.getQuantity()));
         //get product json
         //cartToUpdate.getCartProducts().add(product);
         cartRepository.save(cartToUpdate);

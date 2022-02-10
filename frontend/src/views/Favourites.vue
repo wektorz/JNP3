@@ -4,7 +4,7 @@
     <button> COMPARE </button>
     <div class="products">
       <div v-for="i in 16" :key="i" class="product">
-        <ProductCard :hideFav="true" :hideComp="false" :img="img"></ProductCard>
+        <ProductCard :authed="authed" :hideCart="true" :hideFav="true" :hideComp="false" :img="img"></ProductCard>
       </div>
     </div>
   </div>
@@ -15,6 +15,7 @@ import ProductCard from "@/components/ProductCard.vue";
 export default {
   components: { ProductCard },
   name: "Favourites",
+  props: ["login", "cookie", "authed"],
   data() {
     return {
       items: null,

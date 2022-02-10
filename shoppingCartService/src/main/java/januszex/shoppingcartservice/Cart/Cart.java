@@ -20,6 +20,5 @@ import java.util.TreeSet;
 public class Cart implements Serializable {
     @Id
     private String ownerLogin;
-    private TreeMap<String, String> cartProducts;
-
+    private TreeMap<String, ProductDTO> cartProducts;
 }

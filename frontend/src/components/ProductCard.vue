@@ -2,19 +2,25 @@
      <div class="product">
       <div class="card">
       <img :src="imgUrl()" style="width:100%; border-radius:10px 10px 0 0"/>
-      <p class="desc">Lorem ipsulasjdiofjaoisjfioajfo[asdjfoiajfoiapfjaspiodfjm</p>
+      <p class="desc">{{desc}}</p>
       </div>
       <div class="price">
-        $22
+        ${{price}}
       </div>
-      <div v-if="!hideFav" class="favBtn">
-        <button @click="makeFavourite">*</button>
+      <div v-if="!hideQuantity && authed" class="quantity">
+        {{quantity}}
       </div>
-      <div v-if="!hideComp" class="compBox">
+      <div v-if="!hideFav && authed" class="favBtn">
+        <button @click="emitMakeFavourite">*</button>
+      </div>
+      <div v-if="!hideComp && authed" class="compBox">
         <input type="checkbox">
       </div>
-      <div v-if="!hideDelete" class="delBtn">
-        <button @click="deleteFromCart">X</button>
+      <div v-if="!hideDelete && authed" class="delBtn">
+        <button @click="emitDeleteCart">X</button>
+      </div>
+      <div v-if="!hideCart && authed" class="addCart">
+        <button @click="emitAddCart">+</button>
       </div>
     </div>
 </template>
@@ -27,26 +33,24 @@ export default {
     hideFav: {default: false},
     hideComp: {default: true},
     hideDelete: {default: true},
-    id: {default: -1},
+    hideCart: {default: false},
+    hideQuantity: {default: true},
+    id: {default: "siusiak"},
+    price: {default: 2},
     img: {default: ""},
-    desc: {default: ""}
+    desc: {default: "AMOGUS"},
+    quantity: {default: 0},
+    authed: {default: false}
   },
   methods: {
-    makeFavourite(){
-      this.axios
-          .post(
-            "http://favourites_service:8080/api/fav",
-            { id: this.id},
-            {
-              headers: {
-                "Content-Type":
-                  "application/x-www-form-urlencoded; charset=UTF-8",
-              },
-            }
-          )
-          .then((response) => {console.log(response); if (response.status == 200) this.$emit('update:authed', true);});
+    emitAddCart() {
+      console.log(this.id);
+      this.$emit('addToCart', this.id, this.price, 1);
+      this.$emit('update:quantity', this.quantity + 1);
     },
-    deleteFromCart(){
+    emitDeleteCart() {
+      this.$emit('deleteFromCart', this.id, this.price, 1);
+      this.$emit('update:quantity', this.quantity - 1 < 0 ? 0 : this.quantity - 1);
     },
     imgUrl() {
       return require('@/assets/' + this.img);
@@ -100,6 +104,25 @@ export default {
   left: -10px;
   position: absolute;
   top: -10px;
+}
+
+.addCart{
+  display: inline-block;
+  right: -10px;
+  position: absolute;
+  bottom: -10px;
+  background-color: green;
+}
+
+
+.quantity{
+  border-radius: 100px;
+  background-color: blue;
+  box-shadow: blue 0 0 0 10px;
+  display: inline-block;
+  left: -10px;
+  position: absolute;
+  bottom: -10px;
 }
 
 .desc{

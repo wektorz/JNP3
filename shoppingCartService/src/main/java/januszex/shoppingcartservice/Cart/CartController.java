@@ -27,7 +27,7 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getCart(@RequestParam String cookie, @RequestParam String login) {
+    public ResponseEntity<List<ProductDTO>> getCart(@RequestParam String cookie, @RequestParam String login) {
         try {
             return new ResponseEntity<>(cartService.getCart(new UserPair(cookie, login)), HttpStatus.OK);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class CartController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -53,7 +53,8 @@ public class CartController {
             cartService.deleteFromCart(request);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+            logger.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -63,7 +64,7 @@ public class CartController {
             cartService.buy(cart);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
