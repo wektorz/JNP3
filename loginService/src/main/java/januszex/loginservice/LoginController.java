@@ -39,4 +39,15 @@ public class LoginController {
     {
         return service.login(json);
     }
+
+
+    @PostMapping(
+            value = "/logout",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = "application/json"
+    )
+    public ResponseEntity<String> logout(@RequestBody LoginAndCookie json)
+    {
+        return service.logout(json);
+    }
 }
