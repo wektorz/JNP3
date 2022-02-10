@@ -3,7 +3,9 @@
     <h1>HOME</h1>
     <button @click="testGet()">testGet</button>
     <button @click="testPost()">testPost</button>
-    <input v-model="getId" type="number">
+    <button @click="testDelete()">testDelete</button>
+    <input v-model="getLogin" type="text" placeholder="Login">
+    <input v-model="getCookie" type="text" placeholder="Cookie">
     <p>{{test}}</p>
     <div class="products">
       <div v-for="i in 20" :key="i" class="product">
@@ -23,15 +25,19 @@ export default {
     return {
       img: "fork.jpg",
       test: "",
-      getId : ""
+      getLogin : "",
+      getCookie : ""
     };
   },
   methods:{
     async testGet(){
-      this.test = await this.axios.get(`http://localhost:10001/api/cart?id=${this.getId}`).then(response => response.data)
+      this.test = await this.axios.get(`http://localhost:8080/api/cart?cookie=${this.getCookie}&login=${this.getLogin}`).then(response => response.data)
     },
     async testPost(){
-      this.test = await this.axios.post('http://localhost:10001/api/cart', {userId: this.getId, itemId: 10101, quantity: 3}).then(response => response.data)
+      this.test = await this.axios.post('http://localhost:8080/api/cart', {cookie: this.getCookie, login: this.getLogin, itemId: 10101, quantity: 3}).then(response => response.data)
+    },
+    async testDelete(){
+      this.test = await this.axios.delete('http://localhost:8080/api/cart', {data: {cookie: this.getCookie, login: this.getLogin, itemId: 10101, quantity: 3}}).then(response => response.data)
     }
   }
 };

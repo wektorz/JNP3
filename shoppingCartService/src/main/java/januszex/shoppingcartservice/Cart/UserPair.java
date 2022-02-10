@@ -3,13 +3,9 @@ package januszex.shoppingcartservice.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
 @AllArgsConstructor
-public class CartDTO implements Serializable {
+public class UserPair {
     private String cookie;
     private String login;
-    private int itemId;
-    private int quantity;
 }

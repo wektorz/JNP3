@@ -11,12 +11,15 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @Data
 @RedisHash("Cart")
 @AllArgsConstructor
 public class Cart implements Serializable {
     @Id
-    private int ownerId;
-    private ArrayList<String> cartProducts;
+    private String ownerLogin;
+    private TreeMap<Integer, String> cartProducts;
+
 }
