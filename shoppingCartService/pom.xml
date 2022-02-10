@@ -97,16 +97,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <filtering>true</filtering><!-- if it is neccessary -->
-                <directory>${project.build.directory}</directory><!-- from -->
-                <targetPath>${project.basedir}/../dockerCompose/shoppingCartDocker</targetPath><!-- to -->
-                <includes><!-- what -->
-                    <include>shoppingCartService-0.0.1-SNAPSHOT.jar</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 
 </project>

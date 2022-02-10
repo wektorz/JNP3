@@ -1,10 +1,14 @@
 package januszex.loginservice;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
+@Document
 public class LoginAndPassword {
     @Id
-    private int id;
+    private String id;
 
     private String login;
     private String haslo;

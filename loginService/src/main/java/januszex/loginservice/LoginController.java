@@ -1,5 +1,6 @@
 package januszex.loginservice;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@AllArgsConstructor
 public class LoginController {
     @Autowired
     private LoginService service;
@@ -19,14 +21,14 @@ public class LoginController {
             )
     public ResponseEntity<String> authenticate(@RequestBody LoginAndPassword json)
     {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return service.auth(json);
     }
 
 
     @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody LoginAndPassword json)
     {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return service.register(json);
     }
 
     @PostMapping(value = "/login")
