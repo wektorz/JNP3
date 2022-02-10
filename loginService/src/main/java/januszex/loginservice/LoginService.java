@@ -13,23 +13,45 @@ import org.springframework.http.converter.HttpMessageConverter;
 public class LoginService {
 
     private LoginAndPasswordRepository loginAndPasswordRepository;
+    private LoginAndCookieRepository loginAndCookieRepository;
 
     public ResponseEntity<String> login(LoginAndPassword login)
     {
+        if (!login.validate()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        System.out.println(login.toString());
-        return new ResponseEntity<>(login.toString(), HttpStatus.OK);
+        BooleanWrapper ok = new BooleanWrapper();
+
+        loginAndPasswordRepository.findLoginAndPasswordByLoginAndHaslo(login.getLogin(), login.getHaslo())
+                .ifPresentOrElse(
+                        l -> { ok.set(true); },
+                        ()->{ ok.set(false);  }
+                );
+
+        if(ok.get())
+        {
+            //correct login
+            System.out.println("OK login");
+            LoginAndCookie l = new LoginAndCookie(login.getLogin());
+
+            loginAndCookieRepository.deleteLoginAndCookieByLogin(login.getLogin());
+
+            loginAndCookieRepository.insert(l);
+            return new ResponseEntity<>(l.toString(), HttpStatus.OK);
+        }
+        else
+        {
+            System.out.println("BAD login");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<String> register(LoginAndPassword login)
     {
         if (!login.validate()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        System.out.println("OK register");
-
         BooleanWrapper ok = new BooleanWrapper();
 
-        loginAndPasswordRepository.findLoginAndPasswordByLogin("jan")
+        loginAndPasswordRepository.findLoginAndPasswordByLogin(login.getLogin())
                 .ifPresentOrElse(
                 l -> { ok.set(false); },
                 ()->{ loginAndPasswordRepository.insert(login); }
@@ -48,8 +70,25 @@ public class LoginService {
         }
     }
 
-    public ResponseEntity<String> auth(LoginAndPassword json)
+    public ResponseEntity<String> auth(LoginAndCookie login)
     {
-        return new ResponseEntity<>(HttpStatus.OK);
+        BooleanWrapper ok = new BooleanWrapper();
+
+        loginAndCookieRepository.findLoginAndCookieByLoginAndCookie(login.getLogin(), login.getCookie())
+                .ifPresentOrElse(
+                        l -> { ok.set(true); },
+                        ()->{ ok.set(false); }
+                );
+
+        if(ok.get())
+        {
+            System.out.println("OK auth");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else
+        {
+            System.out.println("BAD auth");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
