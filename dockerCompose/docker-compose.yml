@@ -12,8 +12,8 @@ services:
     build:
       context: ../favouritesService/
       dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
-    depends_on:
-      - redis
+#    depends_on:
+#      - redis
     ports:
       - '10000:8080'
     volumes:
@@ -23,8 +23,8 @@ services:
     build:
       context: ../shoppingCartService/
       dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
-    depends_on:
-      - redis
+#    depends_on:
+#      - redis
     ports:
       - '10001:8080'
 
@@ -57,11 +57,11 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=root
 
-  redis:
-    image: redis
-    container_name: "redis"
-    ports:
-      - '6379:6379'
+#  redis:
+#    image: redis
+#    container_name: "redis"
+#    ports:
+#      - '6379:6379'
 
 # panel admina idk czemu nie działa pewnie wina WSL2 :(
 #  login_db_express:

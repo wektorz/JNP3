@@ -15,9 +15,11 @@ public class LoginService {
 
     public ResponseEntity<String> login(LoginAndPassword login)
     {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
 
         System.out.println(login.toString());
-        return new ResponseEntity<>(login.toString(),headers, HttpStatus.OK);
+        return new ResponseEntity<>(login.toString(), headers, HttpStatus.OK);
     }
 
     public ResponseEntity<String> register(LoginAndPassword json)
