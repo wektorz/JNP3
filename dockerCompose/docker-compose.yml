@@ -28,6 +28,7 @@ services:
       - spring_data_mongodb_database=mydatabase
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb
+      - spring_data_mongodb_auto-index-creation=true
       #- spring_data_mongodb_username=root
       #- spring_data_mongodb_password=root
 

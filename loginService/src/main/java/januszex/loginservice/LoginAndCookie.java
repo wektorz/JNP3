@@ -1,16 +1,25 @@
 package januszex.loginservice;
 
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.security.SecureRandom;
 import java.util.Random;
 
+@Data
+@Document
 public class LoginAndCookie {
+    @Id
+    private String id;
+
+    @Indexed(unique = true)
     private String login;
     private String cookie;
 
-    LoginAndCookie(String login, String cookie)
+    LoginAndCookie()
     {
-        this.login=login;
-        this.cookie=cookie;
     }
 
     LoginAndCookie(String login)
@@ -23,5 +32,13 @@ public class LoginAndCookie {
             s[i] = (char) (random.nextInt(24)+65);
         }
         this.cookie= new String(s);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "login='" + login + '\'' +
+                ", cookie='" + cookie + '\'' +
+                '}';
     }
 }

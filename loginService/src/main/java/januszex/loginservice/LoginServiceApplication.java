@@ -4,6 +4,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import java.util.List;
 
 @SpringBootApplication
 public class LoginServiceApplication {
@@ -12,18 +17,29 @@ public class LoginServiceApplication {
         SpringApplication.run(LoginServiceApplication.class, args);
     }
 
-  /*  @Bean
-    CommandLineRunner createLoginAndPassword(LoginAndPasswordRepository repository, LoginAndPassword login){
-        return args->{
-            repository.insert(login);
-        };
-    }*/
 
     @Bean
-    CommandLineRunner runner(LoginAndPasswordRepository repository){
+    CommandLineRunner runner(LoginAndPasswordRepository repository, MongoTemplate mongoTemplate){
         return args->{
             LoginAndPassword login = new LoginAndPassword("jan","pawel");
-            repository.insert(login);
+            /*
+            Query query = new Query();
+            query.addCriteria(Criteria.where("login").is("jan"));
+            List<LoginAndPassword> users = mongoTemplate.find(query, LoginAndPassword.class);
+
+            if(users.isEmpty())
+            {
+                repository.insert(login);
+            }
+            else
+            {
+                System.out.println("duplicate login: " + login.getLogin() );
+            }*/
+
+            repository.findLoginAndPasswordByLogin("jan").ifPresentOrElse(
+                    l -> { System.out.println("duplicate login ");},
+                    ()->{ repository.insert(login);}
+            );
         };
     }
 }
