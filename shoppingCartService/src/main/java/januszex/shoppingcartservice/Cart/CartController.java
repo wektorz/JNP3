@@ -1,5 +1,7 @@
 package januszex.shoppingcartservice.Cart;
 
+import net.minidev.json.JSONObject;
+import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,11 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getCart(@RequestParam int id) {
+    public ResponseEntity<List<String>> getCart(@RequestParam String cookie, @RequestParam String login) {
         try {
-            return new ResponseEntity<>(cartService.getCart(id), HttpStatus.OK);
+            return new ResponseEntity<>(cartService.getCart(new UserPair(cookie, login)), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -41,7 +43,7 @@ public class CartController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Failed", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -56,7 +58,7 @@ public class CartController {
     }
 
     @PostMapping("/buy")
-    public ResponseEntity<String> buyCart(@RequestBody Cart cart){
+    public ResponseEntity<String> buyCart(@RequestBody BuyDTO cart){
         try {
             cartService.buy(cart);
             return new ResponseEntity<>("Success", HttpStatus.OK);
