@@ -24,7 +24,7 @@ export default {
   },
   methods:{
     async addToCart(id, price, n){
-      const response = await this.axios.post('http://localhost:8080/api/cart', 
+      const response = await this.axios.post('http://localhost:10001/api/cart', 
       {cookie: this.cookie, login: this.login, itemId: id, quantity: n}).then(response => response.status);
       if (response != 200)
         return;

@@ -21,9 +21,8 @@
           Register
         </button>
         <router-link v-if="authed" to="/">
-          <button @click="authed = false">Logout</button>
+          <button @click="logout">Logout</button>
         </router-link>
-        <button @click="authed = true">DEBUG AUTH</button>
         <router-link v-if="authed" to="/favourites">
           <button class="favbutton">Favourites *</button>
         </router-link>
@@ -67,9 +66,10 @@ export default {
     };
   },
   async created() {
-    //auth
-    //if authed
     this.syncCartData();
+  },
+  beforeUnmount() {
+    this.axios.post('http://localhost:10002/api/logout', {login: this.login, cookie: this.cookie})
   },
   methods: {
     updatePrice(add) {
@@ -83,7 +83,7 @@ export default {
         this.cartItemsQuantity = 0;
     },
     async syncCartData() {
-      const data = await this.axios.get(`http://localhost:8080/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
+      const data = await this.axios.get(`http://localhost:10001/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
       this.cartSum = data.map(product => (product.price * product.quantity)).reduce((acc, price) => price + acc);
       this.cartItemsQuantity = data.map(product => product.quantity).reduce((acc, quantity) => quantity + acc);
     },
@@ -92,6 +92,11 @@ export default {
       this.cookie = cookie;
       this.login = login;
       this.syncCartData();
+    },
+    async logout() {
+      console.log("logout")
+      const response = await this.axios.post('http://localhost:10002/api/logout', {login: this.login, cookie: this.cookie})
+      .then(() => this.authed = false).catch(() => console.log("Couldnt logout"));
     }
   }
 };
