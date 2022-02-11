@@ -30,6 +30,7 @@ public class Product {
     @Override
     public String toString() {
         return "{" +
+                "\"id\": \"" + id + "\"," +
                 "\"desc\": \"" + desc + "\"," +
                 "\"price\": \"" + price + "\"," +
                 "\"img\": \"" + img + "\"" +
