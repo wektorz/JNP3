@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,14 +47,18 @@ public class CartService {
         Cart cartToUpdate = cartRepository.findById(request.getLogin()).orElse(new Cart(request.getLogin(), new TreeMap<>()));
         if(cartToUpdate.getCartProducts() == null)
             cartToUpdate.setCartProducts(new TreeMap<>());
+        if(cartToUpdate.getCartProducts().containsKey(request.getItemId())) {
+            cartToUpdate.getCartProducts().computeIfPresent(request.getItemId(),
+                    (key, value) -> new ProductDTO(value.getId(), value.getDesc(), value.getPrice(), value.getImg(), value.getQuantity() + request.getQuantity()));
+            return;
+        }
 
         ResponseEntity<ProductServiceDTO[]> response = restTemplate.getForEntity(productUrl + String.format("?id=%s", request.getItemId()), ProductServiceDTO[].class);
         if(response.getBody() == null)
             throw new Exception("400");
         ProductDTO product = mapToProductDTO(response.getBody()[0], 1);
         product.setQuantity(1);
-        cartToUpdate.getCartProducts().computeIfPresent(request.getItemId(),
-                (key, value) -> new ProductDTO(value.getId(), value.getDesc(), value.getPrice(), value.getImg(), value.getQuantity() + product.getQuantity()));
+
         cartToUpdate.getCartProducts().putIfAbsent(request.getItemId(), product);
         cartRepository.save(cartToUpdate);
     }

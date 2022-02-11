@@ -17,18 +17,17 @@ services:
 ##    ports:
 ##      - '44444:8080'
 #
-##  favourites_service:
-##    build:
-##      context: ../favouritesService/
-##      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
-##    hostname: 'favourites_service'
-##    depends_on:
-##      - redis
-##    ports:
-##      - '10000:8080'
-##    volumes:
-##      - '~/'
-##
+  favourites_service:
+    build:
+      context: ../favouritesService/
+      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
+    links:
+      - redis
+    ports:
+      - '10000:8080'
+    environment:
+      logging.level.org.springframework: DEBUG
+
   shoppingcart_service:
     build:
       context: ../shoppingCartService/

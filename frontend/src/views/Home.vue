@@ -5,9 +5,8 @@
       <div v-for="product in items" :key="product.id" class="product">
         <ProductCard 
         @addToCart="addToCart"
-        @deleteFromCart="deleteFromCart" 
+        @addToFav="addToFav"
         :authed="authed"   
-        :hideFav="true" 
         :id="product.id"
         :desc="product.desc"
         :price="product.price"
@@ -42,6 +41,10 @@ export default {
         return;
       this.$emit('updatePrice', price * n);
       this.$emit('updateCartQuantity', n);
+    },
+    addToFav(id){
+      this.axios.post('http://localhost:10001/api/cart', {cookie: this.cookie, login: this.login, itemId: id})
+      .catch(() => console.log("Couldn't add to favourites"));
     }
   }
 };

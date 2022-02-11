@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 @Data
-@RedisHash("Cart")
+@RedisHash(timeToLive = 1800, value = "Cart")
 @AllArgsConstructor
 public class Cart implements Serializable {
     @Id

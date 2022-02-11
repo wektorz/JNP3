@@ -51,6 +51,13 @@ export default {
     emitDeleteCart() {
       this.$emit('deleteFromCart', this.id, this.price, 1);
       this.$emit('update:quantity', this.quantity - 1 < 0 ? 0 : this.quantity - 1);
+    },
+    emitAddFav() {
+      console.log(this.id);
+      this.$emit('addToFav', this.id);
+    },
+    emitDeleteFav() {
+      this.$emit('deleteFromFav', this.id);
     }
   }
 }
