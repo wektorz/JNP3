@@ -21,7 +21,7 @@ public class ProductController {
 
 
     @GetMapping(
-            value = "api/products",
+            value = "/api/products",
             produces = "application/json"
     )
     public ResponseEntity<ArrayList<Product>> getproducts(@RequestParam(required = false) Optional<String> id)

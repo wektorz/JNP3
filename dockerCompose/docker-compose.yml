@@ -77,18 +77,32 @@ services:
     build:
       context: ../productsService/
       dockerfile: ../dockerCompose/productsDocker/Dockerfile
+    container_name: "product_service"
+    hostname: products
     ports:
       - '10003:8080'
     depends_on:
       - mongodb2
-    hostname: products
     environment:
       - spring_data_mongodb_authentication_database=admin
       - spring_data_mongodb_database=mydatabase
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
+
+  product_service2:
+    build:
+      context: ../productsService/
+      dockerfile: ../dockerCompose/productsDocker/Dockerfile
+    container_name: "product_service2"
+    depends_on:
+      - mongodb2
+    environment:
+      - spring_data_mongodb_authentication_database=admin
+      - spring_data_mongodb_database=mydatabase
+      - spring_data_mongodb_port=27017
+      - spring_data_mongodb_host=mongodb2
+      - spring_data_mongodb_auto-index-creation=true
 
   mongodb2:
     image: mongo
@@ -101,7 +115,20 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=root
 
-
+  varnish-products:
+    image: varnish:stable
+    container_name: varnish-products
+    volumes:
+      - "./default.vcl:/etc/varnish/default.vcl"
+    ports:
+      - "80:80"
+    tmpfs:
+      - /var/lib/varnish:exec
+    environment:
+      - VARNISH_SIZE=2G
+    command: "-p default_keep=300"
+    depends_on:
+      - product_service
 
 volumes:
   mongo-data:
