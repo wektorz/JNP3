@@ -13,28 +13,13 @@ public class Product {
     private String id;
 
     private String desc;
-    private String price;
+    private float price;
     private String img;
 
-    Product()
-    {
-    }
-
-    Product(String desc,String price,String img)
+    Product(String desc, float price, String img)
     {
         this.desc=desc;
         this.price=price;
         this.img=img;
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "\"id\": \"" + id + "\"," +
-                "\"desc\": \"" + desc + "\"," +
-                "\"price\": \"" + price + "\"," +
-                "\"img\": \"" + img + "\"" +
-                '}';
-    }
-
 }

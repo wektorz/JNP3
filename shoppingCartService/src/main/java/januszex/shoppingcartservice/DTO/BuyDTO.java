@@ -1,8 +1,7 @@
-package januszex.shoppingcartservice.Cart;
+package januszex.shoppingcartservice.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.minidev.json.JSONObject;
 
 import java.util.ArrayList;
 

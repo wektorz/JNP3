@@ -2,9 +2,16 @@
   <div>
     <h1>HOME</h1>
     <div class="products">
-      <ProductCard id="test1" :authed="authed" @addToCart="addToCart" :img="img"></ProductCard>
-      <div v-for="i in 20" :key="i" class="product">
-        <ProductCard :authed="authed" @addToCart="addToCart" :img="img"></ProductCard>
+      <div v-for="product in items" :key="product.id" class="product">
+        <ProductCard 
+        @addToCart="addToCart"
+        @deleteFromCart="deleteFromCart" 
+        :authed="authed"   
+        :hideFav="true" 
+        :id="product.id"
+        :desc="product.desc"
+        :price="product.price"
+        :img="product.img"></ProductCard>
       </div>
     </div>
   </div>
@@ -19,8 +26,13 @@ export default {
   props: ["login", "cookie", "authed"],
   data() {
     return {
-      img: "fork.jpg",
+      items: null
     };
+  },
+  async created () {
+    this.items = await this.axios.get(`http://localhost:10003/api/products`)
+    .then(response => response.data)
+    .catch(() => console.log("Couldn't load products"));
   },
   methods:{
     async addToCart(id, price, n){

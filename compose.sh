@@ -3,21 +3,21 @@
 set -e
 
 cd favouritesService
-mvn clean && mvn compile && mvn install
+mvn clean compile install
 cd ..
 
 cd loginService
-mvn clean && mvn compile && mvn install
+mvn clean compile install
 cd ..
 
 
-cd favouritesService
-mvn clean && mvn compile && mvn install
+cd shoppingCartService
+mvn clean compile install
 cd ..
 
 
 cd productsService
-mvn clean && mvn compile && mvn install
+mvn clean compile install
 cd ..
 
 cd dockerCompose

@@ -1,10 +1,11 @@
 <template>
     <div style="background-color: #ffffff">
     <h1>YOUR CART</h1>
-    <button> BUY </button>
+    <button @click="buy"> BUY </button>
     <div class="products">
-      <div v-for="product in this.items" :key="product.id" class="product">
-        <ProductCard @addToCart="addToCart"
+      <div v-for="product in this.items" :key="product.id" class="product" v-show="product.quantity > 0">
+        <ProductCard 
+        @addToCart="addToCart"
         @deleteFromCart="deleteFromCart" 
         :authed="authed" 
         :hideQuantity="false" 
@@ -13,7 +14,7 @@
         :id="product.id"
         :desc="product.desc"
         :price="product.price"
-        img="fork.jpg" 
+        :img="product.img" 
         v-model:quantity="product.quantity"></ProductCard>
       </div>
     </div>
@@ -54,6 +55,15 @@ export default {
       console.log(n);
       this.$emit('updatePrice', -price * n);
       this.$emit('updateCartQuantity', -n);
+    },
+    async buy() {
+      const data = await this.axios.post('http://localhost:10001/api/cart/buy', {cookie: this.cookie, login: this.login, cart: this.items})
+      .then(() => {
+        this.items = null;
+        this.$emit('updatePrice', 'reset');
+        this.$emit('updateCartQuantity', 'reset');
+        })
+      .catch(() => console.log("Purchase failed"));
     }
   }
 }

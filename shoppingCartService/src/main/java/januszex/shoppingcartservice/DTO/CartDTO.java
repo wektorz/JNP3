@@ -1,4 +1,4 @@
-package januszex.shoppingcartservice.Cart;
+package januszex.shoppingcartservice.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

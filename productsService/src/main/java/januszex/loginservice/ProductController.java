@@ -7,6 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Optional;
 
 @RestController
@@ -21,14 +24,10 @@ public class ProductController {
             value = "api/products",
             produces = "application/json"
     )
-    public ResponseEntity<String> getproducts(@RequestParam(required = false) Optional<String> id)
+    public ResponseEntity<ArrayList<Product>> getproducts(@RequestParam(required = false) Optional<String> id)
     {
         return service.getproducts(id);
     }
-
-
-
-
 }
 /*products:
     get:

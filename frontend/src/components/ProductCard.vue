@@ -1,7 +1,7 @@
 <template>
      <div class="product">
       <div class="card">
-      <img :src="imgUrl()" style="width:100%; border-radius:10px 10px 0 0"/>
+      <img :src="img" style="width:100%; border-radius:10px 10px 0 0"/>
       <p class="desc">{{desc}}</p>
       </div>
       <div class="price">
@@ -51,9 +51,6 @@ export default {
     emitDeleteCart() {
       this.$emit('deleteFromCart', this.id, this.price, 1);
       this.$emit('update:quantity', this.quantity - 1 < 0 ? 0 : this.quantity - 1);
-    },
-    imgUrl() {
-      return require('@/assets/' + this.img);
     }
   }
 }

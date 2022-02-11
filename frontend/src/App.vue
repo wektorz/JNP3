@@ -73,11 +73,21 @@ export default {
   },
   methods: {
     updatePrice(add) {
+      if (add == 'reset')
+      {
+        this.cartSum = 0;
+        return;
+      }
       this.cartSum += add;
       if(this.cartSum < 0)
         this.cartSum = 0; 
     },
     updateCartQuantity(add) {
+      if (add == 'reset')
+      {
+        this.cartItemsQuantity = 0;
+        return;
+      }
       this.cartItemsQuantity += add;
       if(this.cartItemsQuantity < 0)
         this.cartItemsQuantity = 0;

@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="productsService" />
         <module name="loginService" />
         <module name="shoppingCartService" />
         <module name="favouritesService" />
@@ -17,6 +18,7 @@
       <module name="favouritesService" target="11" />
       <module name="loginService" target="11" />
       <module name="loginService (1)" target="11" />
+      <module name="productsService" target="11" />
       <module name="shoppingCartService" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -25,6 +27,7 @@
       <module name="favouritesService" options="-parameters" />
       <module name="loginService" options="-parameters" />
       <module name="loginService (1)" options="-parameters" />
+      <module name="productsService" options="-parameters" />
       <module name="shoppingCartService" options="-parameters" />
     </option>
   </component>
