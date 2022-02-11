@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/JNP3.iml" filepath="$PROJECT_DIR$/.idea/JNP3.iml" />
       <module fileurl="file://$PROJECT_DIR$/favouritesService/favouritesService.iml" filepath="$PROJECT_DIR$/favouritesService/favouritesService.iml" />
       <module fileurl="file://$PROJECT_DIR$/loginService/loginService.iml" filepath="$PROJECT_DIR$/loginService/loginService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/productService/loginService (1).iml" filepath="$PROJECT_DIR$/productService/loginService (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/productsService/loginService (1).iml" filepath="$PROJECT_DIR$/productsService/loginService (1).iml" />
       <module fileurl="file://$PROJECT_DIR$/shoppingCartService/shoppingCartService.iml" filepath="$PROJECT_DIR$/shoppingCartService/shoppingCartService.iml" />
     </modules>
   </component>

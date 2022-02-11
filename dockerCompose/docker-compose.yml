@@ -54,8 +54,10 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb
       - spring_data_mongodb_auto-index-creation=true
+      - logging.level.org.springframework=DEBUG
       #- spring_data_mongodb_username=root
       #- spring_data_mongodb_password=root
+
 
 
   mongodb:
@@ -72,7 +74,7 @@ services:
 
   product_service:
     build:
-      context: ../productService/
+      context: ../productsService/
       dockerfile: ../dockerCompose/productsDocker/Dockerfile
     ports:
       - '10003:8080'

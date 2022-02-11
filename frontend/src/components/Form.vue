@@ -59,36 +59,20 @@ export default {
   methods: {
     postToLoginService() {
       if (this.isLogin) {
-        // post to /api/login
-        // jeśli nie działa to localhost:port_z_compose
-        this.axios
-          .post(
-            "http://login_service:8080/api/login",
-            { login: this.login, password: this.password },
-            {
-              headers: {
-                "Content-Type":
-                  "application/x-www-form-urlencoded; charset=UTF-8",
-              },
-            }
-          )
-          .then((response) => {console.log(response); if (response.status == 200) this.$emit('update:authed', true);});   
-        this.visibility = false;
+        this.axios.post("htpp://localhost:10002/api/register").then((response) => {
+          console.log(response); 
+          if (response.status == 200){ 
+            this.$emit('update:authed', true);
+            console.log(response.data);
+          }
+          });   
+        
+        // this.visibility = false;
       } else {
         //post to /api/register
         console.log("register");
-        this.axios
-          .post(
-            "http://login_service:8080/api/register",
-            { login: this.login, password: this.password },
-            {
-              headers: {
-                "Content-Type":
-                  "application/x-www-form-urlencoded; charset=UTF-8",
-              },
-            }
-          )
-          .then((response) => {console.log(response); if (response.status == 200) this.$emit('update:authed', true);});
+        this.axios.post("http://localhost:10002/api/register", { login: this.login, haslo: this.password })
+          .then((response) => console.log(response));
         this.visibility = false;
       }
     },

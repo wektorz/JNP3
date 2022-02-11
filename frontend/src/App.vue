@@ -60,8 +60,8 @@ export default {
       showForm: false,
       loginForm: true,
       authed: false,
-      login: "jan",
-      cookie: "siur",
+      login: "",
+      cookie: "",
       cartSum: 0,
       cartItemsQuantity: 0
     };
