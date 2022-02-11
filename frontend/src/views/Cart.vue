@@ -33,12 +33,12 @@ export default {
     };
   },
   async created () {
-    this.items = await this.axios.get(`http://localhost:8080/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
+    this.items = await this.axios.get(`http://localhost:10001/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
     console.log(this.items);
   },
   methods: {
    async addToCart(id, price, n){
-      const response = await this.axios.post('http://localhost:8080/api/cart', 
+      const response = await this.axios.post('http://localhost:10001/api/cart', 
       {cookie: this.cookie, login: this.login, itemId: id, quantity: n}).then(response => response.status);
       if (response != 200)
         return;
@@ -46,7 +46,7 @@ export default {
       this.$emit('updateCartQuantity', n);
     },
     async deleteFromCart(id, price, n){
-      const response = await this.axios.delete('http://localhost:8080/api/cart', 
+      const response = await this.axios.delete('http://localhost:10001/api/cart', 
       {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}}).then(response => response.status)
       if (response != 200)
         return;

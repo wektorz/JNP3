@@ -10,6 +10,7 @@
         </div>
 
         <div class="container">
+           <p>{{ msg }}</p>
           <label for="uname"><b>Username</b></label>
           <input
             v-model="login"
@@ -43,6 +44,7 @@ export default {
     return {
       login: "",
       password: "",
+      msg: "",
     };
   },
   computed: {
@@ -52,6 +54,8 @@ export default {
       },
       set(value) {
         this.$emit("update:showForm", value);
+        if (value == false)
+          this.msg = "";
         return 0;
       },
     },
@@ -59,21 +63,29 @@ export default {
   methods: {
     postToLoginService() {
       if (this.isLogin) {
-        this.axios.post("htpp://localhost:10002/api/register").then((response) => {
-          console.log(response); 
-          if (response.status == 200){ 
-            this.$emit('update:authed', true);
+        this.axios
+          .post("http://localhost:10002/api/login", {
+            login: this.login,
+            haslo: this.password,
+          })
+          .then((response) => {
+            this.$emit("authed", response.data.cookie, response.data.login);
             console.log(response.data);
-          }
-          });   
-        
+            this.visibility = false;
+          })
+          .catch(() => (this.msg = "Invalid Credentials"));
+
         // this.visibility = false;
       } else {
         //post to /api/register
         console.log("register");
-        this.axios.post("http://localhost:10002/api/register", { login: this.login, haslo: this.password })
-          .then((response) => console.log(response));
-        this.visibility = false;
+        this.axios
+          .post("http://localhost:10002/api/register", {
+            login: this.login,
+            haslo: this.password,
+          })
+          .then(() => {this.visibility = false;})
+          .catch(() => (this.msg = "Such a user already exists"));
       }
     },
   },
