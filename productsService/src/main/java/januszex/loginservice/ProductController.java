@@ -18,7 +18,7 @@ public class ProductController {
 
 
     @GetMapping(
-            value = "api/products",
+            value = "/api/products",
             produces = "application/json"
     )
     public ResponseEntity<String> getproducts(@RequestParam(required = false) Optional<String> id)

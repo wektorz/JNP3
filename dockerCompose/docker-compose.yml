@@ -98,7 +98,20 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=root
 
-
+  varnish-products:
+    image: varnish:stable
+    container_name: varnish-products
+    volumes:
+      - "./default.vcl:/etc/varnish/default.vcl"
+    ports:
+      - "80:80"
+    tmpfs:
+      - /var/lib/varnish:exec
+    environment:
+      - VARNISH_SIZE=2G
+    command: "-p default_keep=300"
+    depends_on:
+      - product_service
 
 volumes:
   mongo-data:
