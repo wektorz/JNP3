@@ -29,13 +29,13 @@ export default {
     };
   },
   async created () {
-    this.items = await this.axios.get(`http://localhost:10003/api/products`)
+    this.items = await this.axios.get(`http://localhost:80/api/products`)
     .then(response => response.data)
     .catch(() => console.log("Couldn't load products"));
   },
   methods:{
     async addToCart(id, price, n){
-      const response = await this.axios.post('http://localhost:10001/api/cart', 
+      const response = await this.axios.post('http://localhost:81/api/cart', 
       {cookie: this.cookie, login: this.login, itemId: id, quantity: n}).then(response => response.status);
       if (response != 200)
         return;

@@ -34,18 +34,18 @@ export default {
     };
   },
   async created () {
-    this.items = await this.axios.get(`http://localhost:10001/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
+    this.items = await this.axios.get(`http://localhost:81/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
     console.log(this.items);
   },
   methods: {
    async addToCart(id, price, n){
-      const response = await this.axios.post('http://localhost:10001/api/cart', 
+      const response = await this.axios.post('http://localhost:81/api/cart', 
       {cookie: this.cookie, login: this.login, itemId: id, quantity: n})
       this.$emit('updatePrice', price * n);
       this.$emit('updateCartQuantity', n);
     },
     async deleteFromCart(id, price, n){
-      const response = await this.axios.delete('http://localhost:10001/api/cart', 
+      const response = await this.axios.delete('http://localhost:81/api/cart', 
       {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}})
       .then(this.items = this.items.filter(el => {return (el.quantity > 0)}))
       console.log(this.items);
@@ -53,7 +53,7 @@ export default {
       this.$emit('updateCartQuantity', -n);
     },
     async buy() {
-      const data = await this.axios.post('http://localhost:10001/api/cart/buy', {cookie: this.cookie, login: this.login, cart: this.items})
+      const data = await this.axios.post('http://localhost:81/api/cart/buy', {cookie: this.cookie, login: this.login, cart: this.items})
       .then(() => {
         this.items = null;
         this.$emit('updatePrice', 'reset');
