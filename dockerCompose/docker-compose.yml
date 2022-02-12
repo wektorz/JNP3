@@ -266,6 +266,7 @@ services:
   #mongos  --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017
   #sh.addShard("shard1rs/shard1svr1:27017,shard1svr2:27017,shard1svr3:27017")
   #sh.addShard("shard2rs/shard2svr1:27017,shard2svr2:27017,shard2svr3:27017")
+  #sh.enableSharding("mydatabase")
   #sh.status()
 
 
