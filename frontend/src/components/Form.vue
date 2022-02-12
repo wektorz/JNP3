@@ -106,7 +106,7 @@ input[type="password"] {
 
 /* Set a style for all buttons */
 button {
-  background-color: #04aa6d;
+  background-color: #358aa3;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -131,6 +131,7 @@ button:hover {
   text-align: center;
   margin: 24px 0 12px 0;
   position: relative;
+  background-color: #3f4956;
 }
 
 img.avatar {
@@ -140,6 +141,7 @@ img.avatar {
 
 .container {
   padding: 16px;
+  background-color: #3f4956;
 }
 
 span.psw {
@@ -163,7 +165,7 @@ span.psw {
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
+  background-color: #3f4956;
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */

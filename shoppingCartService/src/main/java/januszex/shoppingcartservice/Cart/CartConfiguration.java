@@ -8,24 +8,30 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableCaching
 public class CartConfiguration {
 
+    private final List<String> clusterNodes = Arrays.asList("redis-0:6379", "redis-1:6379", "redis-2:6379");
     private final String url;
     private final int port;
     private final String password;
 
-    public CartConfiguration(@Value("${spring.redis.host}") String url,
-                             @Value("${spring.redis.port}") int port,
-                             @Value("${spring.redis.password}") String password) {
+    public CartConfiguration(@Value("redis") String url,
+                             @Value("6379") int port,
+                             @Value("12345") String password) {
         this.url = url;
         this.port = port;
         this.password = password;
@@ -86,9 +92,5 @@ public class CartConfiguration {
         StringRedisTemplate template = new StringRedisTemplate();
         template.setConnectionFactory(redisConnectionFactory);
         return template;
-    }
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
     }
 }

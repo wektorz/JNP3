@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color: #ffffff">
+    <div>
     <h1>YOUR CART</h1>
     <button @click="buy"> BUY </button>
     <div class="products">

@@ -25,8 +25,8 @@ services:
       - redis
     ports:
       - '10000:8080'
-    environment:
-      logging.level.org.springframework: DEBUG
+#    environment:
+#      logging.level.org.springframework: DEBUG
 
   shoppingcart_service:
     build:
@@ -69,8 +69,6 @@ services:
       #- spring_data_mongodb_username=root
       #- spring_data_mongodb_password=root
 
-
-
   mongodb:
     image: mongo
     container_name: "mongodb"
@@ -99,7 +97,6 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
 
   product_service2:
     build:
@@ -114,7 +111,6 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
 
   mongodb2:
     image: mongo
@@ -157,9 +153,49 @@ services:
     depends_on:
       - shoppingcart_service
 
+
+#  redis-node-0:
+#    image: docker.io/bitnami/redis-cluster:6.2
+#    volumes:
+#      - redis-cluster_data-0:/bitnami/redis/data
+#    container_name: redis-0
+#    depends_on:
+#      - redis-node-1
+#      - redis-node-2
+#    environment:
+#      - "ALLOW_EMPTY_PASSWORD=yes"
+#      - 'REDIS_CLUSTER_REPLICAS=1'
+#      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+#      - 'REDIS_CLUSTER_CREATOR=yes'
+#
+#
+#  redis-node-1:
+#    image: docker.io/bitnami/redis-cluster:6.2
+#    volumes:
+#      - redis-cluster_data-1:/bitnami/redis/data
+#    container_name: redis-1
+#    environment:
+#      - "ALLOW_EMPTY_PASSWORD=yes"
+#      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+#
+#  redis-node-2:
+#    image: docker.io/bitnami/redis-cluster:6.2
+#    volumes:
+#      - redis-cluster_data-2:/bitnami/redis/data
+#    container_name: redis-2
+#    environment:
+#      - "ALLOW_EMPTY_PASSWORD=yes"
+#      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+
 volumes:
   mongo-data:
     driver: local
   mongo-data2:
     driver: local
   redis_data:
+#  redis-cluster_data-0:
+#    driver: local
+#  redis-cluster_data-1:
+#    driver: local
+#  redis-cluster_data-2:
+#    driver: local

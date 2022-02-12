@@ -1,5 +1,10 @@
 <template>
   <nav>
+     <router-link to="/">
+     <div class="logo">
+        <img style="height: 100%;" src="../src/assets/logo.png"/>
+      </div>
+      </router-link>
     <div class="flexbox">
       <div>
         <button
@@ -27,9 +32,6 @@
           <button class="favbutton">Favourites *</button>
         </router-link>
       </div>
-      <router-link to="/">
-        <img src="../src/assets/logo.png" style="height: 100%" />
-      </router-link>
       <router-link v-if="authed" to="/cart">
         <div id="cartContainter">
           <div id="cartValue">${{cartSum}}</div>
@@ -124,7 +126,8 @@ export default {
 }
 
 nav {
-  background-color: green;
+  position:relative;
+  background-color: #2d7d95;
   height: 12vh;
   box-shadow: black 0px 2px 18px 0px;
   margin-bottom: 2%;
@@ -151,5 +154,11 @@ nav {
 
 #cartItemNumber {
   color: red;
+}
+
+.logo{
+  height: 100%;
+  float:left;
+  margin-left: 20px;
 }
 </style>

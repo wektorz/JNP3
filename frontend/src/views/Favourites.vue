@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #ffffff">
+  <div>
     <h1>FAVOURITES</h1>
     <button @click="compare"> COMPARE </button>
     <div class="products">
@@ -10,7 +10,8 @@
         :authed="authed"
         :hideComp="false"  
         :hideDelete="false" 
-        :hideFav="true" 
+        :hideFav="true"
+        :hideCart="true" 
         :id="product.id"
         :desc="product.desc"
         :price="product.price"

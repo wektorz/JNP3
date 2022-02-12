@@ -11,13 +11,13 @@
         {{quantity}}
       </div>
       <div v-if="!hideFav && authed" class="favBtn">
-        <button @click="emitAddFav">*</button>
+        <button class="fav" @click="emitAddFav">&#10084;</button>
       </div>
       <div v-if="!hideComp && authed" class="compBox">
         <input type="checkbox">
       </div>
       <div v-if="!hideDelete && authed" class="delBtn">
-        <button @click="emitDeleteCart">X</button>
+        <button class="del" @click="emitDeleteCart">X</button>
       </div>
       <div v-if="!hideCart && authed" class="addCart">
         <button @click="emitAddCart">+</button>
@@ -67,7 +67,7 @@ export default {
 
 .card{
     box-shadow: #00000080 0 0 15px 1px;
-    background-color: ivory;
+    background-color: #db7ccfc9;
     border-radius: 10px;
     display: inline-block;
 
@@ -77,13 +77,14 @@ export default {
 }
 
 .price{
-  background-color: red;
-  border-radius: 100px;
+  background-color: #926ee7;
+  border-radius: 5px;
   display: inline-block;
   right: -10px;
   position: absolute;
   top: -10px;
-  box-shadow: red 0 0 0 10px;
+  box-shadow: #926ee7 0 0 0 10px;
+  color: white;
 }
 
 .favBtn{
@@ -91,23 +92,38 @@ export default {
   left: -10px;
   position: absolute;
   top: -10px;
+  height: 40px;
+  width: 40px;
+  line-height: 38px;
+  text-align: center;
+  padding: 0;
+  vertical-align: top;
+  border: 1px solid #ff4c4c;
+  background-color: #ff4c4c;
+  color: #fff;
 }
 
 .compBox{
   display: inline-block;
-  left: -10px;
+  right: -10px;
   position: absolute;
-  top: -10px;
+  bottom: -10px;
 }
 
 .delBtn{
-  background-color: red;
-  border-radius: 100px;
-  color: gold;
   display: inline-block;
   left: -10px;
   position: absolute;
   top: -10px;
+  height: 40px;
+  width: 40px;
+  line-height: 38px;
+  text-align: center;
+  padding: 0;
+  vertical-align: top;
+  border: 1px solid #ff7330;
+  background-color: #ff7330;
+  color: #fff;
 }
 
 .addCart{
@@ -115,14 +131,22 @@ export default {
   right: -10px;
   position: absolute;
   bottom: -10px;
-  background-color: green;
+  height: 40px;
+  width: 40px;
+  line-height: 38px;
+  text-align: center;
+  padding: 0;
+  vertical-align: top;
+  border: 1px solid #a1a1a1;
+  background-color: #a1a1a1;
+  color: #fff;
 }
 
 
 .quantity{
-  border-radius: 100px;
-  background-color: blue;
-  box-shadow: blue 0 0 0 10px;
+  border-radius: 2px;
+  background-color: #47b57e;
+  box-shadow: #47b57e 0 0 0 10px;
   display: inline-block;
   left: -10px;
   position: absolute;
@@ -131,5 +155,36 @@ export default {
 
 .desc{
     overflow-wrap: break-word;
+    text-align: center;
+}
+
+button{
+  background-image: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Montserrat','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+
+.addCart:hover{
+  filter: invert(1);
+  transition: all 0.2s;
+}
+.delBtn:hover{
+  transition: all 0.2s;
+  filter: invert(1);
+}
+.favBtn:hover{
+  transition: all 0.2s;
+  filter: invert(1);
 }
 </style>
