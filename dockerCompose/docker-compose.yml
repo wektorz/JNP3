@@ -41,17 +41,15 @@ services:
     environment:
       logging.level.org.springframework: DEBUG
 
-#  shoppingcart_service_2:
-#    build:
-#      context: ../shoppingCartService/
-#      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
-#    container_name: shoppingcart_service
-#    links:
-#      - redis
-#    ports:
-#      - '10001:8080'
-#    environment:
-#      logging.level.org.springframework: DEBUG
+  shoppingcart_service_2:
+    build:
+      context: ../shoppingCartService/
+      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
+    container_name: shoppingcart_service_2
+    links:
+      - redis
+    environment:
+      logging.level.org.springframework: DEBUG
 
   login_service:
     build:
@@ -145,20 +143,20 @@ services:
     depends_on:
       - product_service
 
-#  varnish-cart:
-#    image: varnish:stable
-#    container_name: varnish-cart
-#    volumes:
-#      - "./cart.vcl:/etc/varnish/default.vcl"
-#    ports:
-#      - "81:80"
-#    tmpfs:
-#      - /var/lib/varnish:exec
-#    environment:
-#      - VARNISH_SIZE=2G
-#    command: "-p default_keep=300"
-#    depends_on:
-#      - shoppingcart_service
+  varnish-cart:
+    image: varnish:stable
+    container_name: varnish-cart
+    volumes:
+      - "./cart.vcl:/etc/varnish/default.vcl"
+    ports:
+      - "81:80"
+    tmpfs:
+      - /var/lib/varnish:exec
+    environment:
+      - VARNISH_SIZE=2G
+    command: "-p default_keep=300"
+    depends_on:
+      - shoppingcart_service
 
 
 

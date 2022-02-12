@@ -8,7 +8,7 @@ backend app1 {
 }
 
 backend app2 {
-    .host = "product_service2";
+    .host = "shoppingcart_service_2";
     .port = "8080";
 }
 
@@ -20,4 +20,8 @@ sub vcl_init {
 
 sub vcl_recv {
     set req.backend_hint = vdir.backend();
+}
+
+sub vcl_hit {
+    return (pass);
 }

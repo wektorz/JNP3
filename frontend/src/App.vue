@@ -93,7 +93,7 @@ export default {
         this.cartItemsQuantity = 0;
     },
     async syncCartData() {
-      const data = await this.axios.get(`http://localhost:10001/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
+      const data = await this.axios.get(`http://localhost:81/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
       this.cartSum = data.map(product => (product.price * product.quantity)).reduce((acc, price) => price + acc);
       this.cartItemsQuantity = data.map(product => product.quantity).reduce((acc, quantity) => quantity + acc);
     },
@@ -106,7 +106,12 @@ export default {
     async logout() {
       console.log("logout")
       const response = await this.axios.post('http://localhost:10002/api/logout', {login: this.login, cookie: this.cookie})
-      .then(() => this.authed = false).catch(() => console.log("Couldnt logout"));
+      .then(() => {
+        this.authed = false;
+        this.cookie = "";
+        this.login = "";
+        this.cartItemsQuantity = 0;
+        this.cartSum = 0;}).catch(() => console.log("Couldnt logout"));
     }
   }
 };
