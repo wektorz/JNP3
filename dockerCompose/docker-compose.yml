@@ -17,16 +17,17 @@ services:
 ##    ports:
 ##      - '44444:8080'
 #
-  favourites_service:
-    build:
-      context: ../favouritesService/
-      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
-    links:
-      - redis
-    ports:
-      - '10000:8080'
-    environment:
-      logging.level.org.springframework: DEBUG
+
+#  favourites_service:
+#    build:
+#      context: ../favouritesService/
+#      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
+#    links:
+#      - redis
+#    ports:
+#      - '10000:8080'
+#    environment:
+#      logging.level.org.springframework: DEBUG
 
   shoppingcart_service:
     build:
@@ -159,9 +160,144 @@ services:
 #    depends_on:
 #      - shoppingcart_service
 
+
+
+
+
+  #shards
+
+  shard1svr1:
+    container_name: shard1svr1
+    image: mongo
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db
+    ports:
+      - 50001:27017
+    volumes:
+      - shard1svr1:/data/db
+
+  shard1svr2:
+    container_name: shard1svr2
+    image: mongo
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db
+    ports:
+      - 50002:27017
+    volumes:
+      - shard1svr2:/data/db
+
+  shard1svr3:
+    container_name: shard1svr3
+    image: mongo
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db
+    ports:
+      - 50003:27017
+    volumes:
+      - shard1svr3:/data/db
+
+  shard2svr1:
+    container_name: shard2svr1
+    image: mongo
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db
+    ports:
+      - 50004:27017
+    volumes:
+      - shard2svr1:/data/db
+
+  shard2svr2:
+    container_name: shard2svr2
+    image: mongo
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db
+    ports:
+      - 50005:27017
+    volumes:
+      - shard2svr2:/data/db
+
+  shard2svr3:
+    container_name: shard2svr3
+    image: mongo
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db
+    ports:
+      - 50006:27017
+    volumes:
+        - shard2svr3:/data/db
+  cfgsvr1:
+    container_name: cfgsvr1
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db
+    ports:
+      - 40001:27017
+    volumes:
+      - cfgsvr1:/data/db
+
+  cfgsvr2:
+    container_name: cfgsvr2
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db
+    ports:
+      - 40002:27017
+    volumes:
+      - cfgsvr2:/data/db
+
+  cfgsvr3:
+    container_name: cfgsvr3
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db
+    ports:
+      - 40003:27017
+    volumes:
+      - cfgsvr3:/data/db
+
+  mongos:
+    container_name: mongos
+    image: mongo
+    command: mongos  --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017 --bind_ip 0.0.0.0 --port 27017
+    ports:
+      - 60000:27017
+
+
+
+  #on cfgsvr1
+  #rs.initiate({_id: "cfgrs",configsvr: true,members: [{ _id: 0, host: "cfgsvr1:27017" },{ _id: 1, host: "cfgsvr2:27017" },{ _id: 2, host: "cfgsvr3:27017" }]})
+
+  #on shard1svr1 terminal
+  #rs.initiate({_id: "shard1rs",members: [{ _id: 0, host: "shard1svr1:27017" },{ _id: 1, host: "shard1svr2:27017" },{ _id: 2, host: "shard1svr3:27017" }]})
+
+  #on shard2svr1 terminal
+  #rs.initiate({_id: "shard2rs",members: [{ _id: 0, host: "shard2svr1:27017" },{ _id: 1, host: "shard2svr2:27017" },{ _id: 2, host: "shard2svr3:27017" }]})
+
+  #on mongos
+  #mongos  --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017
+  #sh.addShard("shard1rs/shard1svr1:27017,shard1svr2:27017,shard1svr3:27017")
+  #sh.addShard("shard2rs/shard2svr1:27017,shard2svr2:27017,shard2svr3:27017")
+  #sh.status()
+
+
 volumes:
   mongo-data:
     driver: local
   mongo-data2:
     driver: local
   redis_data:
+
+  #mongoshading
+  shard1svr1:
+    driver: local
+  shard1svr2:
+    driver: local
+  shard1svr3:
+    driver: local
+
+  shard2svr1:
+    driver: local
+  shard2svr2:
+    driver: local
+  shard2svr3:
+    driver: local
+
+  cfgsvr1:
+    driver: local
+  cfgsvr2:
+    driver: local
+  cfgsvr3:
+    driver: local
+
+
