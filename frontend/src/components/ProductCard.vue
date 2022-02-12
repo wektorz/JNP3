@@ -11,7 +11,7 @@
         {{quantity}}
       </div>
       <div v-if="!hideFav && authed" class="favBtn">
-        <button @click="emitMakeFavourite">*</button>
+        <button @click="emitAddFav">*</button>
       </div>
       <div v-if="!hideComp && authed" class="compBox">
         <input type="checkbox">
@@ -35,10 +35,10 @@ export default {
     hideDelete: {default: true},
     hideCart: {default: false},
     hideQuantity: {default: true},
-    id: {default: "siusiak"},
+    id: {default: ""},
     price: {default: 2},
     img: {default: ""},
-    desc: {default: "AMOGUS"},
+    desc: {default: ""},
     quantity: {default: 0},
     authed: {default: false}
   },

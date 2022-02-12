@@ -43,7 +43,7 @@ export default {
       this.$emit('updateCartQuantity', n);
     },
     addToFav(id){
-      this.axios.post('http://localhost:10001/api/cart', {cookie: this.cookie, login: this.login, itemId: id})
+      this.axios.post('http://localhost:10000/api/fav', {cookie: this.cookie, login: this.login, itemId: id})
       .catch(() => console.log("Couldn't add to favourites"));
     }
   }
@@ -64,7 +64,7 @@ h1{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 5%;
-  row-gap: 5%;
+  row-gap: 1%;
   justify-content: center;
 }
 

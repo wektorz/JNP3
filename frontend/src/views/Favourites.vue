@@ -35,6 +35,13 @@ export default {
     this.items = await this.axios.get(`http://localhost:10000/api/fav?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
     console.log(this.items);
   },
+  methods: {
+    deleteFromCart(id) {
+      this.axios.delete('http://localhost:10000/api/fav', 
+      {data: {cookie: this.cookie, login: this.login, itemId: id}})
+      .then(this.items = this.items.filter(el => {return el.id != id}))
+    }
+  }
 };
 </script>
 

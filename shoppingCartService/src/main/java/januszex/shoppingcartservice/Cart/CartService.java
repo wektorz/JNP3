@@ -47,9 +47,11 @@ public class CartService {
         Cart cartToUpdate = cartRepository.findById(request.getLogin()).orElse(new Cart(request.getLogin(), new TreeMap<>()));
         if(cartToUpdate.getCartProducts() == null)
             cartToUpdate.setCartProducts(new TreeMap<>());
+
         if(cartToUpdate.getCartProducts().containsKey(request.getItemId())) {
             cartToUpdate.getCartProducts().computeIfPresent(request.getItemId(),
                     (key, value) -> new ProductDTO(value.getId(), value.getDesc(), value.getPrice(), value.getImg(), value.getQuantity() + request.getQuantity()));
+            cartRepository.save(cartToUpdate);
             return;
         }
 

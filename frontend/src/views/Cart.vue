@@ -3,7 +3,7 @@
     <h1>YOUR CART</h1>
     <button @click="buy"> BUY </button>
     <div class="products">
-      <div v-for="product in this.items" :key="product.id" class="product" v-show="product.quantity > 0">
+      <div v-for="product in this.items" :key="product.id" class="product">
         <ProductCard 
         @addToCart="addToCart"
         @deleteFromCart="deleteFromCart" 
@@ -40,19 +40,15 @@ export default {
   methods: {
    async addToCart(id, price, n){
       const response = await this.axios.post('http://localhost:10001/api/cart', 
-      {cookie: this.cookie, login: this.login, itemId: id, quantity: n}).then(response => response.status);
-      if (response != 200)
-        return;
+      {cookie: this.cookie, login: this.login, itemId: id, quantity: n})
       this.$emit('updatePrice', price * n);
       this.$emit('updateCartQuantity', n);
     },
     async deleteFromCart(id, price, n){
       const response = await this.axios.delete('http://localhost:10001/api/cart', 
-      {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}}).then(response => response.status)
-      if (response != 200)
-        return;
-      console.log(price);
-      console.log(n);
+      {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}})
+      .then(this.items = this.items.filter(el => {return (el.quantity > 0)}))
+      console.log(this.items);
       this.$emit('updatePrice', -price * n);
       this.$emit('updateCartQuantity', -n);
     },

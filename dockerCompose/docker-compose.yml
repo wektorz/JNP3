@@ -32,12 +32,25 @@ services:
     build:
       context: ../shoppingCartService/
       dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
+    container_name: shoppingcart_service
     links:
       - redis
     ports:
       - '10001:8080'
     environment:
       logging.level.org.springframework: DEBUG
+
+#  shoppingcart_service_2:
+#    build:
+#      context: ../shoppingCartService/
+#      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
+#    container_name: shoppingcart_service
+#    links:
+#      - redis
+#    ports:
+#      - '10001:8080'
+#    environment:
+#      logging.level.org.springframework: DEBUG
 
   login_service:
     build:
@@ -88,6 +101,7 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
+      - logging.level.org.springframework=DEBUG
 
   product_service2:
     build:
@@ -102,6 +116,7 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
+      - logging.level.org.springframework=DEBUG
 
   mongodb2:
     image: mongo
@@ -128,6 +143,21 @@ services:
     command: "-p default_keep=300"
     depends_on:
       - product_service
+
+#  varnish-cart:
+#    image: varnish:stable
+#    container_name: varnish-cart
+#    volumes:
+#      - "./cart.vcl:/etc/varnish/default.vcl"
+#    ports:
+#      - "81:80"
+#    tmpfs:
+#      - /var/lib/varnish:exec
+#    environment:
+#      - VARNISH_SIZE=2G
+#    command: "-p default_keep=300"
+#    depends_on:
+#      - shoppingcart_service
 
 volumes:
   mongo-data:
