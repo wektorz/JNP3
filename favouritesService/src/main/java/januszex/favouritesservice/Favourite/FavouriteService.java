@@ -20,7 +20,7 @@ public class FavouriteService {
     private final RestTemplate restTemplate;
     private final Logger logger = LoggerFactory.getLogger(FavouriteService.class);
     private final String authUrl = "http://login:8080/api/auth";
-    private final String productUrl = "http://products:8080/api/products";
+    private final String productUrl = "http://products:80/api/products";
 
     @Autowired
     public FavouriteService(FavouriteRepository cartRepository, RestTemplateBuilder restTemplateBuilder){

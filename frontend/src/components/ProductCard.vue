@@ -5,7 +5,7 @@
       <p class="desc">{{desc}}</p>
       </div>
       <div class="price">
-        ${{price}}
+        {{price}}zł
       </div>
       <div v-if="!hideQuantity && authed" class="quantity">
         {{quantity}}

@@ -12,7 +12,6 @@ COPY package*.json ./
 RUN npm install
 RUN npm install @vue/cli@3.7.0 -g
 
-COPY node_modules node_modules
 COPY public public
 COPY src src
 COPY .editorconfig .editorconfig

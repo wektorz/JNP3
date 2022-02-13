@@ -1,10 +1,10 @@
 <template>
   <nav>
-     <router-link to="/">
-     <div class="logo">
-        <img style="height: 100%;" src="../src/assets/logo.png"/>
+    <router-link to="/">
+      <div class="logo">
+        <img style="height: 100%" src="../src/assets/logo.png" />
       </div>
-      </router-link>
+    </router-link>
     <div class="flexbox">
       <div>
         <button
@@ -34,9 +34,9 @@
       </div>
       <router-link v-if="authed" to="/cart">
         <div id="cartContainter">
-          <div id="cartValue">${{cartSum}}</div>
+          <div id="cartValue">{{ cartSum }}zł</div>
           <img src="../src/assets/cart.png" style="height: inherit" />
-          <div id="cartItemNumber">{{cartItemsQuantity}}</div>
+          <div id="cartItemNumber">{{ cartItemsQuantity }}</div>
         </div>
       </router-link>
     </div>
@@ -48,7 +48,13 @@
     v-show="showForm"
     @authed="auth"
   ></Form>
-  <router-view :authed="authed" :cookie="cookie" :login="login" @updatePrice="updatePrice" @updateCartQuantity="updateCartQuantity"/>
+  <router-view
+    :authed="authed"
+    :cookie="cookie"
+    :login="login"
+    @updatePrice="updatePrice"
+    @updateCartQuantity="updateCartQuantity"
+  />
 </template>
 
 <script>
@@ -64,40 +70,47 @@ export default {
       login: "",
       cookie: "",
       cartSum: 0,
-      cartItemsQuantity: 0
+      cartItemsQuantity: 0,
     };
   },
   async created() {
     this.syncCartData();
   },
   beforeUnmount() {
-    this.axios.post('http://localhost:10002/api/logout', {login: this.login, cookie: this.cookie})
+    this.axios.post("http://localhost:10002/api/logout", {
+      login: this.login,
+      cookie: this.cookie,
+    });
   },
   methods: {
     updatePrice(add) {
-      if (add == 'reset')
-      {
+      if (add == "reset") {
         this.cartSum = 0;
         return;
       }
       this.cartSum += add;
-      if(this.cartSum < 0)
-        this.cartSum = 0; 
+      if (this.cartSum < 0) this.cartSum = 0;
     },
     updateCartQuantity(add) {
-      if (add == 'reset')
-      {
+      if (add == "reset") {
         this.cartItemsQuantity = 0;
         return;
       }
       this.cartItemsQuantity += add;
-      if(this.cartItemsQuantity < 0)
-        this.cartItemsQuantity = 0;
+      if (this.cartItemsQuantity < 0) this.cartItemsQuantity = 0;
     },
     async syncCartData() {
-      const data = await this.axios.get(`http://localhost:81/api/cart?cookie=${this.cookie}&login=${this.login}`).then(response => response.data);
-      this.cartSum = data.map(product => (product.price * product.quantity)).reduce((acc, price) => price + acc);
-      this.cartItemsQuantity = data.map(product => product.quantity).reduce((acc, quantity) => quantity + acc);
+      const data = await this.axios
+        .get(
+          `http://localhost:81/api/cart?cookie=${this.cookie}&login=${this.login}`
+        )
+        .then((response) => response.data);
+      this.cartSum = data
+        .map((product) => product.price * product.quantity)
+        .reduce((acc, price) => price + acc);
+      this.cartItemsQuantity = data
+        .map((product) => product.quantity)
+        .reduce((acc, quantity) => quantity + acc);
     },
     auth(cookie, login) {
       this.authed = true;
@@ -106,16 +119,22 @@ export default {
       this.syncCartData();
     },
     async logout() {
-      console.log("logout")
-      const response = await this.axios.post('http://localhost:10002/api/logout', {login: this.login, cookie: this.cookie})
-      .then(() => {
-        this.authed = false;
-        this.cookie = "";
-        this.login = "";
-        this.cartItemsQuantity = 0;
-        this.cartSum = 0;}).catch(() => console.log("Couldnt logout"));
-    }
-  }
+      console.log("logout");
+      const response = await this.axios
+        .post("http://localhost:10002/api/logout", {
+          login: this.login,
+          cookie: this.cookie,
+        })
+        .then(() => {
+          this.authed = false;
+          this.cookie = "";
+          this.login = "";
+          this.cartItemsQuantity = 0;
+          this.cartSum = 0;
+        })
+        .catch(() => console.log("Couldnt logout"));
+    },
+  },
 };
 </script>
 
@@ -126,7 +145,7 @@ export default {
 }
 
 nav {
-  position:relative;
+  position: relative;
   background-color: #2d7d95;
   height: 12vh;
   box-shadow: black 0px 2px 18px 0px;
@@ -156,9 +175,9 @@ nav {
   color: red;
 }
 
-.logo{
+.logo {
   height: 100%;
-  float:left;
+  float: left;
   margin-left: 20px;
 }
 </style>

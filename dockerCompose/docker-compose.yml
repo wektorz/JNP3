@@ -2,59 +2,65 @@ version: '3.8'
 
 services:
   redis:
+    image: redis
     container_name: redis
-    image: redis:v1
-    build: redisDocker/
     hostname: redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-##  front:
-##    build:
-##      context: ../frontend
-##      dockerfile: ../dockerCompose/frontDocker/Dockerfile
-##    ports:
-##      - '44444:8080'
-#
-
-#  favourites_service:
+      - "./redis.conf:/redis/redis.conf"
+    command:
+      - "redis-server"
+      - "/redis/redis.conf"
+#  front:
 #    build:
-#      context: ../favouritesService/
-#      dockerfile: ../dockerCompose/favouritesDocker/Dockerfile
-#    links:
-#      - redis
+#      context: ../frontend
+#      dockerfile: ../dockerCompose/frontDocker/Dockerfile
 #    ports:
-#      - '10000:8080'
-#    environment:
-#      logging.level.org.springframework: DEBUG
+#      - '44444:8080'
+
+  favourites_service:
+    image: openjdk:17
+    links:
+      - redis
+    ports:
+      - '10000:8080'
+    volumes:
+      - ../favouritesService/target/favouritesService-0.0.1-SNAPSHOT.jar:/favouritesService.jar
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "favouritesService.jar"
 
   shoppingcart_service:
-    build:
-      context: ../shoppingCartService/
-      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
+    image: openjdk:17
     container_name: shoppingcart_service
     links:
       - redis
     ports:
       - '10001:8080'
-    environment:
-      logging.level.org.springframework: DEBUG
+    volumes:
+      - "../shoppingCartService/target/shoppingCartService-0.0.1-SNAPSHOT.jar:/shoppingCartService.jar"
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "shoppingCartService.jar"
 
   shoppingcart_service_2:
-    build:
-      context: ../shoppingCartService/
-      dockerfile: ../dockerCompose/shoppingCartDocker/Dockerfile
+    image: openjdk:17
     container_name: shoppingcart_service_2
     links:
       - redis
-    environment:
-      logging.level.org.springframework: DEBUG
+    volumes:
+      - "../shoppingCartService/target/shoppingCartService-0.0.1-SNAPSHOT.jar:/shoppingCartService.jar"
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "shoppingCartService.jar"
 
   login_service:
-    build:
-      context: ../loginService/
-      dockerfile: ../dockerCompose/loginDocker/Dockerfile
+    image: openjdk:17
     hostname: login
     ports:
       - '10002:8080'
@@ -66,10 +72,14 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
       #- spring_data_mongodb_username=root
       #- spring_data_mongodb_password=root
-
+    volumes:
+      - "../loginService/target/loginService-0.0.1-SNAPSHOT.jar:/loginService.jar"
+    command:
+      - "java"
+      - "-jar"
+      - "loginService.jar"
 
 
   mongodb:
@@ -85,11 +95,8 @@ services:
 
 
   product_service:
-    build:
-      context: ../productsService/
-      dockerfile: ../dockerCompose/productsDocker/Dockerfile
+    image: openjdk:17
     container_name: "product_service"
-    hostname: products
     ports:
       - '10003:8080'
     depends_on:
@@ -100,12 +107,15 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
+    volumes:
+      - "../productsService/target/productsService-0.0.1-SNAPSHOT.jar:/productsService.jar"
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "productsService.jar"
 
   product_service2:
-    build:
-      context: ../productsService/
-      dockerfile: ../dockerCompose/productsDocker/Dockerfile
+    image: openjdk:17
     container_name: "product_service2"
     depends_on:
       - mongodb2
@@ -115,7 +125,12 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_host=mongodb2
       - spring_data_mongodb_auto-index-creation=true
-      - logging.level.org.springframework=DEBUG
+    volumes:
+      - "../productsService/target/productsService-0.0.1-SNAPSHOT.jar:/productsService.jar"
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "productsService.jar"
 
   mongodb2:
     image: mongo
@@ -131,6 +146,7 @@ services:
   varnish-products:
     image: varnish:stable
     container_name: varnish-products
+    hostname: products
     volumes:
       - "./default.vcl:/etc/varnish/default.vcl"
     ports:
@@ -161,8 +177,8 @@ services:
 
 
 
-
-  #shards
+#
+#  #shards
 
   shard1svr1:
     container_name: shard1svr1
@@ -252,31 +268,31 @@ services:
       - 60000:27017
 
 
-
-  #on cfgsvr1
-  #rs.initiate({_id: "cfgrs",configsvr: true,members: [{ _id: 0, host: "cfgsvr1:27017" },{ _id: 1, host: "cfgsvr2:27017" },{ _id: 2, host: "cfgsvr3:27017" }]})
-
-  #on shard1svr1 terminal
-  #rs.initiate({_id: "shard1rs",members: [{ _id: 0, host: "shard1svr1:27017" },{ _id: 1, host: "shard1svr2:27017" },{ _id: 2, host: "shard1svr3:27017" }]})
-
-  #on shard2svr1 terminal
-  #rs.initiate({_id: "shard2rs",members: [{ _id: 0, host: "shard2svr1:27017" },{ _id: 1, host: "shard2svr2:27017" },{ _id: 2, host: "shard2svr3:27017" }]})
-
-  #on mongos
-  #mongos  --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017
-  #sh.addShard("shard1rs/shard1svr1:27017,shard1svr2:27017,shard1svr3:27017")
-  #sh.addShard("shard2rs/shard2svr1:27017,shard2svr2:27017,shard2svr3:27017")
-  #sh.enableSharding("mydatabase")
-  #sh.status()
-
-
+#
+#  #on cfgsvr1
+#  #rs.initiate({_id: "cfgrs",configsvr: true,members: [{ _id: 0, host: "cfgsvr1:27017" },{ _id: 1, host: "cfgsvr2:27017" },{ _id: 2, host: "cfgsvr3:27017" }]})
+#
+#  #on shard1svr1 terminal
+#  #rs.initiate({_id: "shard1rs",members: [{ _id: 0, host: "shard1svr1:27017" },{ _id: 1, host: "shard1svr2:27017" },{ _id: 2, host: "shard1svr3:27017" }]})
+#
+#  #on shard2svr1 terminal
+#  #rs.initiate({_id: "shard2rs",members: [{ _id: 0, host: "shard2svr1:27017" },{ _id: 1, host: "shard2svr2:27017" },{ _id: 2, host: "shard2svr3:27017" }]})
+#
+#  #on mongos
+#  #mongos  --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017
+#  #sh.addShard("shard1rs/shard1svr1:27017,shard1svr2:27017,shard1svr3:27017")
+#  #sh.addShard("shard2rs/shard2svr1:27017,shard2svr2:27017,shard2svr3:27017")
+#  #sh.enableSharding("mydatabase")
+#  #sh.status()
+#
+#
 volumes:
   mongo-data:
     driver: local
   mongo-data2:
     driver: local
   redis_data:
-
+    driver: local
   #mongoshading
   shard1svr1:
     driver: local

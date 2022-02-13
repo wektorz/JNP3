@@ -1,6 +1,0 @@
-FROM openjdk:17
-ARG SERVICE=favouritesService
-ARG FILENAME=${SERVICE}-0.0.1-SNAPSHOT.jar
-ENV FILENAME_ENV=${FILENAME}
-ADD target/${FILENAME} /
-ENTRYPOINT java -jar $(echo ${FILENAME_ENV})

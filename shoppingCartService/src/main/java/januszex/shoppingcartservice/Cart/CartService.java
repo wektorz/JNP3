@@ -21,7 +21,7 @@ public class CartService {
     private final RestTemplate restTemplate;
     private final Logger logger = LoggerFactory.getLogger(CartService.class);
     private final String authUrl = "http://login:8080/api/auth";
-    private final String productUrl = "http://products:8080/api/products";
+    private final String productUrl = "http://products:80/api/products";
 
     @Autowired
     public CartService(CartRepository cartRepository, RestTemplateBuilder restTemplateBuilder){
@@ -58,8 +58,7 @@ public class CartService {
         ResponseEntity<ProductServiceDTO[]> response = restTemplate.getForEntity(productUrl + String.format("?id=%s", request.getItemId()), ProductServiceDTO[].class);
         if(response.getBody() == null)
             throw new Exception("400");
-        ProductDTO product = mapToProductDTO(response.getBody()[0], 1);
-        product.setQuantity(1);
+        ProductDTO product = mapToProductDTO(response.getBody()[0], request.getQuantity());
 
         cartToUpdate.getCartProducts().putIfAbsent(request.getItemId(), product);
         cartRepository.save(cartToUpdate);
