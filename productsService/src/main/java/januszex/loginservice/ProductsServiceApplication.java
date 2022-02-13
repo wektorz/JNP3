@@ -1,11 +1,14 @@
 package januszex.loginservice;
 
 
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
 
 
 @SpringBootApplication
@@ -16,8 +19,20 @@ public class ProductsServiceApplication {
     }
 
     @Bean
-    CommandLineRunner runner(ProductRepository repository){
+    CommandLineRunner runner(ProductRepository repository, MongoTemplate template){
         return args->{
+
+            MongoDatabase adminDB = template.getMongoDbFactory()
+                    .getMongoDatabase("admin");
+
+            adminDB.runCommand(new Document("enableSharding", "mydatabase"));
+
+            Document shardCmd = new Document("shardCollection", "mydatabase.product")
+                    .append("key", new Document("mod", 1));
+
+            adminDB.runCommand(shardCmd);
+
+
             Product p = new Product("Widelec do lodów",12F,"https://www.carlroth.com/medias/YC43-1000Wx1000H?context=bWFzdGVyfGltYWdlc3w1NzMwM3xpbWFnZS9qcGVnfGltYWdlcy9oZTMvaGRhLzg4MjIwMzUzMTY3NjYuanBnfGUzNTlkMGM2OWEyNjAwMTZmMWY2ZWE0MzUwZTRmMGQ0MGU0MDE3OGFmNDg1Njg4MTJhYzFlMmI1ZmY4NmI3OTY");
             repository.insert(p);
             p = new Product("Łyżka",13.37F,"https://boma-agd.pl/pol_pm_La-Torre-Inglese-lyzka-nickel-free-553_1.jpg");
