@@ -13,12 +13,12 @@ services:
     command:
       - "redis-server"
       - "/redis/redis.conf"
-#  front:
-#    build:
-#      context: ../frontend
-#      dockerfile: ../dockerCompose/frontDocker/Dockerfile
-#    ports:
-#      - '44444:8080'
+  front:
+    build:
+      context: ../frontend
+      dockerfile: ../dockerCompose/frontDocker/Dockerfile
+    ports:
+      - '44444:8080'
 
   favourites_service:
     image: openjdk:17
