@@ -13,9 +13,6 @@
       <div v-if="!hideFav && authed" class="favBtn">
         <button class="fav" @click="emitAddFav">&#10084;</button>
       </div>
-      <div v-if="!hideComp && authed" class="compBox">
-        <input type="checkbox">
-      </div>
       <div v-if="!hideDelete && authed" class="delBtn">
         <button class="del" @click="emitDeleteCart">X</button>
       </div>
@@ -101,13 +98,6 @@ export default {
   border: 1px solid #ff4c4c;
   background-color: #ff4c4c;
   color: #fff;
-}
-
-.compBox{
-  display: inline-block;
-  right: -10px;
-  position: absolute;
-  bottom: -10px;
 }
 
 .delBtn{

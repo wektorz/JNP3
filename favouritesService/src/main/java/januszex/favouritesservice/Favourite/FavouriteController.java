@@ -58,13 +58,12 @@ public class FavouriteController {
         }
     }
 
-    @PostMapping("/compare")
-    public ResponseEntity<String> compare(@RequestBody CompareDTO cart){
+    @GetMapping("/sort")
+    public ResponseEntity<List<ProductDTO>> sort(@RequestParam String cookie, @RequestParam String login, @RequestParam String type){
         try {
-            favouriteService.compare(cart);
-            return new ResponseEntity<>("Success", HttpStatus.OK);
+            return new ResponseEntity<>(favouriteService.getFavouritesSorted(new UserPair(cookie, login), type), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -16,4 +16,5 @@ public class FavouriteProduct implements Serializable {
     @Id
     private String ownerLogin;
     private TreeMap<String, ProductDTO> favouriteProducts;
+
 }

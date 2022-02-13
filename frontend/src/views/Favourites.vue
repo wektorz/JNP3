@@ -1,14 +1,16 @@
 <template>
   <div>
     <h1>FAVOURITES</h1>
-    <button @click="compare"> COMPARE </button>
+    <div class="flex">
+    <button class="favbutton" @click="sort('desc')"> SORT &#8595; </button>
+    <button class="favbutton" @click="sort('asc')"> SORT &#8593; </button>
+    </div>
     <div class="products">
       <div v-for="product in this.items" :key="product.id" class="product">
         <ProductCard 
         @addToCart="addToCart"
-        @deleteFromCart="deleteFromCart" 
+        @deleteFromCart="deleteFromFav" 
         :authed="authed"
-        :hideComp="false"  
         :hideDelete="false" 
         :hideFav="true"
         :hideCart="true" 
@@ -37,10 +39,13 @@ export default {
     console.log(this.items);
   },
   methods: {
-    deleteFromCart(id) {
+    deleteFromFav(id) {
       this.axios.delete('http://localhost:10000/api/fav', 
       {data: {cookie: this.cookie, login: this.login, itemId: id}})
       .then(this.items = this.items.filter(el => {return el.id != id}))
+    },
+    async sort(type) {
+      this.items = await this.axios.get(`http://localhost:10000/api/fav/sort?cookie=${this.cookie}&login=${this.login}&type=${type}`).then(response => response.data);
     }
   }
 };
@@ -66,5 +71,27 @@ h1 {
 .product {
   justify-self: center;
   align-self: center;
+}
+
+.flex{
+  display: flex;
+  justify-content: center;
+}
+.favbutton{
+  background-color: #0af98a;
+  border-style: double;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 10px;
+  box-shadow: 0 0 10px 2px #6a6a6a;
+  cursor: pointer;
+  margin-bottom: 3%;
+}
+.favbutton:hover{
+  transition: all 0.2s;
+  filter: invert();
 }
 </style>

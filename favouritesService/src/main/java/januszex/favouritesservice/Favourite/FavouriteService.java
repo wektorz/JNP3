@@ -67,11 +67,25 @@ public class FavouriteService {
         favouriteRepository.save(favouriteToUpdate);
     }
 
-    public void compare(CompareDTO cart) throws Exception {
+    public ArrayList<ProductDTO> getFavouritesSorted(UserPair user, String type) throws Exception {
         //isAuthed
-        if (restTemplate.postForEntity(authUrl, makeAuthPostBody(new UserPair(cart.getCookie(), cart.getLogin())),
-                Object.class).getStatusCode() != HttpStatus.OK)
+        if (restTemplate.postForEntity(authUrl, makeAuthPostBody(user), Object.class).getStatusCode() != HttpStatus.OK)
             throw new Exception("400");
+
+        FavouriteProduct favouritesToGet = favouriteRepository.findById(user.getLogin()).orElseThrow();
+        ArrayList<ProductDTO> favourites = new ArrayList<>(favouritesToGet.getFavouriteProducts().values());
+        Collections.sort(favourites, new Comparator<ProductDTO>() {
+            @Override
+            public int compare(ProductDTO o1, ProductDTO o2) {
+                if(o1.getPrice() == o2.getPrice())
+                    return 0;
+                if (type.equals("desc"))
+                    return o1.getPrice() > o2.getPrice() ? -1 : 1;
+                else
+                    return o1.getPrice() < o2.getPrice() ? -1 : 1;
+            }
+        });
+        return favourites;
     }
 
 
@@ -81,4 +95,6 @@ public class FavouriteService {
         entries.put("cookie", user.getCookie());
         return new HttpEntity<>(entries);
     }
+
+
 }

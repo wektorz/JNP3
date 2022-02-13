@@ -7,7 +7,7 @@
     </router-link>
     <div class="flexbox">
       <div>
-        <button
+        <button class="navbutton"
           v-if="!authed"
           @click="
             showForm = true;
@@ -16,7 +16,7 @@
         >
           Login
         </button>
-        <button
+        <button class="navbutton"
           v-if="!authed"
           @click="
             showForm = true;
@@ -26,20 +26,21 @@
           Register
         </button>
         <router-link v-if="authed" to="/">
-          <button @click="logout">Logout</button>
+          <button class="navbutton" @click="logout">Logout</button>
         </router-link>
         <router-link v-if="authed" to="/favourites">
-          <button class="favbutton">Favourites *</button>
+          <button class="navbutton">Favourites &#10084;</button>
         </router-link>
       </div>
+    </div>
       <router-link v-if="authed" to="/cart">
         <div id="cartContainter">
-          <div id="cartValue">{{ cartSum }}zł</div>
+          <div id="cartValue">{{ Math.floor(cartSum * 100) / 100 }}zł</div>
           <img src="../src/assets/cart.png" style="height: inherit" />
           <div id="cartItemNumber">{{ cartItemsQuantity }}</div>
         </div>
       </router-link>
-    </div>
+    
   </nav>
   <Form
     :text="loginForm ? 'Login' : 'Register'"
@@ -155,29 +156,61 @@ nav {
 .flexbox {
   display: flex;
   height: inherit;
-  justify-content: space-between;
-}
-
-.favbutton {
-  float: left;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
 }
 
 #cartContainter {
   float: right;
   height: 75%;
+  margin-right: 20px;
+  text-align: center;
+  margin-top: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 
 #cartValue {
-  color: darkblue;
+  color: white;
+  background-color: #6fd58e;
+  border-radius: 5px;
 }
 
 #cartItemNumber {
-  color: red;
+  color: white;
+  background-color: #bf4388;
+  border-radius: 5px;
 }
 
 .logo {
+  cursor: pointer;
   height: 100%;
   float: left;
   margin-left: 20px;
+  position: absolute;
+  z-index: 2;
 }
+
+.navbutton {
+  background-color: #f50675;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  box-shadow: 0 0 7px 1px #3e3e3e;
+  cursor: pointer;
+}
+
+.navbutton:hover{
+  transition: all 0.2s;
+  filter: invert();
+}
+
 </style>
