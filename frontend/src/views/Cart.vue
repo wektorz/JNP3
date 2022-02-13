@@ -5,7 +5,7 @@
     <button class="buybutton" @click="buy"> BUY </button>
     </div>
     <div class="products">
-      <div v-for="product in this.items" :key="product.id" class="product">
+      <div v-for="product in this.items" :key="product.id" class="product" v-show="product.quantity > 0">
         <ProductCard 
         @addToCart="addToCart"
         @deleteFromCart="deleteFromCart" 
@@ -47,8 +47,7 @@ export default {
     },
     deleteFromCart(id, price, n){
       this.axios.delete('http://localhost:81/api/cart', 
-      {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}})
-      .then(this.items = this.items.filter(el => {return el.quantity > 1}))
+      {data: {cookie: this.cookie, login: this.login, itemId: id, quantity: n}});
       console.log(this.items);
       this.$emit('updatePrice', -price * n);
       this.$emit('updateCartQuantity', -n);

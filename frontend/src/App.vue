@@ -75,6 +75,9 @@ export default {
     };
   },
   async created() {
+    this.cookie = localStorage.cookie;
+    this.login = localStorage.login;
+    this.axios.post('http://localhost:10002/api/auth', {login: this.login, cookie: this.cookie}).then(() => {this.authed = true;});
     this.syncCartData();
   },
   beforeUnmount() {
@@ -117,6 +120,8 @@ export default {
       this.authed = true;
       this.cookie = cookie;
       this.login = login;
+      localStorage.login = login;
+      localStorage.cookie = cookie;
       this.syncCartData();
     },
     async logout() {
@@ -130,6 +135,8 @@ export default {
           this.authed = false;
           this.cookie = "";
           this.login = "";
+          localStorage.login = "";
+          localStorage.cookie = "";
           this.cartItemsQuantity = 0;
           this.cartSum = 0;
         })
